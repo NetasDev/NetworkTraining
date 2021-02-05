@@ -1,0 +1,18 @@
+{
+    "root": "C:\\Users\\tobia\\OneDrive\\Desktop\\bachelor6\\alpha-zero-general-master\\alpha-zero-general-master",
+    "program": "main.py",
+    "startedAt": "2021-01-30T10:15:55.367455",
+    "host": "Tobias-Pc",
+    "username": "tobia",
+    "executable": "C:\\Users\\tobia\\anaconda3\\envs\\testenv\\python.exe",
+    "os": "Windows-10-10.0.18362-SP0",
+    "python": "3.6.10",
+    "cpu_count": 8,
+    "args": [],
+    "state": "killed",
+    "jobType": null,
+    "mode": "run",
+    "project": "SecondBachelor",
+    "heartbeatAt": "2021-01-30T10:16:14.671176",
+    "exitcode": 255
+}

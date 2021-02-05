@@ -1,0 +1,50 @@
+wandb_version: 1
+
+_wandb:
+  desc: null
+  value:
+    cli_version: 0.9.3
+    framework: tensorflow
+    is_jupyter_run: false
+    is_kaggle_kernel: false
+    magic:
+      enable: true
+    python_version: 3.6.10
+arenaCompare:
+  desc: null
+  value: 2
+checkpoint:
+  desc: null
+  value: ./temp/
+cpuct:
+  desc: null
+  value: 1
+load_folder_file:
+  desc: null
+  value:
+  - /dev/models/8x100x50
+  - best
+load_model:
+  desc: null
+  value: false
+maxlenOfQueue:
+  desc: null
+  value: 200000
+numEps:
+  desc: null
+  value: 4
+numIters:
+  desc: null
+  value: 1000
+numItersForTrainExamplesHistory:
+  desc: null
+  value: 20
+numMCTSSims:
+  desc: null
+  value: 25
+tempThreshold:
+  desc: null
+  value: 15
+updateThreshold:
+  desc: null
+  value: 0.6
