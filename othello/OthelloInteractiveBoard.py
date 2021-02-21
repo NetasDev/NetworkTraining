@@ -1,5 +1,6 @@
 import pygame
 import pygame.freetype
+import os
 import pickle
 from .OthelloPlayers import *
 
@@ -7,6 +8,8 @@ class InteractiveBoard():
     def __init__(self,game,player1,player2):
         self.player1 = player1
         self.player2 = player2
+        self.player1_name = self.player1.name
+        self.player2_name = self.player2.name
         self.game = game
         self.player_to_move = 1
         self.size = self.game.n
@@ -46,14 +49,18 @@ class InteractiveBoard():
     def draw_side_board(self,screen):
         Game_Font = pygame.freetype.Font(None,24)
         pygame.draw.rect(screen,(255,255,255),(self.screen_size,0,self.side_screen_size,self.screen_size))
-        Game_Font.render_to(screen,(self.screen_size+1/3*self.side_screen_size,350),"Player 1:",(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/3*self.side_screen_size,400),self.player1.name,(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/3*self.side_screen_size,450),str(self.get_last_move(1)),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,150),"Player 1:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,200),self.player1_name,(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,250),"Last Move:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,250),str(self.get_last_move(1)),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,300),"Score:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+100,300),str(self.game.getScore(self.board,1)),(0,0,0))
 
 
-        Game_Font.render_to(screen,(self.screen_size+1/3*self.side_screen_size,550),"Player 2:",(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/3*self.side_screen_size,600),self.player2.name,(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/3*self.side_screen_size,650),str(self.get_last_move(-1)),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,550),"Player 2:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,600),self.player2_name,(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,650),str(self.get_last_move(-1)),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,700),str(self.game.getScore(self.board,-1)),(0,0,0))
         
         
 
@@ -89,10 +96,15 @@ class InteractiveBoard():
         pygame.init()
         board = self.game.getInitBoard()
         self.board_history.append(self.board)
+
         #FPS = 60
         run = True
         #clock = pygame.time.Clock()
         screen = pygame.display.set_mode((self.screen_size+self.side_screen_size,self.screen_size))
+        self.draw_field(screen)
+        self.draw_side_board(screen)
+        self.draw_board(screen)
+        pygame.display.update()
         while run:
             #clock.tick(FPS)
             for event in pygame.event.get():
@@ -111,9 +123,9 @@ class InteractiveBoard():
 
             if not self.human_players_turn():
                 if self.player_to_move ==1:
-                    move = self.player1.play(self.board)
+                    move = self.player2.play(self.game.getCanonicalForm(self.board,self.player_to_move))
                 else:
-                    move = self.player2.play(self.game.getCanonicalForm(self.board,-1))
+                    move = self.player2.play(self.game.getCanonicalForm(self.board,self.player_to_move))
                 self.board,self.player_to_move = self.game.getNextState(self.board,self.player_to_move,move)
                 self.board_history.append(self.board)
                 self.move_history.append((self.player_to_move,self.game.action_to_move(move)))
@@ -121,10 +133,17 @@ class InteractiveBoard():
             self.draw_field(screen)
             self.draw_side_board(screen)
             self.draw_board(screen)
+
+            if self.game.getGameEnded(self.board,self.player_to_move) !=0:
+                break
             pygame.display.update()
         pygame.quit()
+        return self.game.getGameEnded(self.board, 1)
     
     def save(self,path):
+        self.player1 = None
+        self.player2 = None
+        os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path+'.pkl','wb') as output:
             pickle.dump(self,output,pickle.HIGHEST_PROTOCOL)
 
@@ -139,12 +158,12 @@ class InteractiveBoard():
         board = self.board_history[0]
         move_his = self.move_history
         #InBoard = InteractiveBoard(board,game,len(board))
-        FPS = 60
+        #FPS = 60
         run = True
-        clock = pygame.time.Clock()
+        #clock = pygame.time.Clock()
         screen = pygame.display.set_mode((self.screen_size+self.side_screen_size,self.screen_size))
         while run:
-            clock.tick(FPS)
+            #clock.tick(FPS)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -153,10 +172,12 @@ class InteractiveBoard():
                     if event.key == pygame.K_LEFT:
                         if self.move > 0:
                             self.move = self.move -1
+                            self.player_to_move *= -1
+                        
                     if event.key == pygame.K_RIGHT:
                         if self.move < len(self.board_history)-1:
                             self.move = self.move +1
-
+                            self.player_to_move *= -1
                     
             self.board = self.board_history[self.move]
             self.move_history = move_his[:self.move]
