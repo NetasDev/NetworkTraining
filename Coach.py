@@ -123,6 +123,10 @@ class Coach():
             #end of selfplay/start of training network
             start_time_training = perf_counter()
             # training new network, keeping a copy of the old one
+
+            if perf_counter() - start_time >10800:
+                print(perf_counter()-start_time)
+                break
             self.nnet.save_checkpoint(folder=self.args.checkpoint, filename='temp')
             self.pnet.load_checkpoint(folder=self.args.checkpoint, filename='temp')
             pmctsplayer = NeuralNetworkPlayer(self.game,self.pnet,self.args)
