@@ -1,8 +1,11 @@
 from __future__ import print_function
 import sys
-sys.path.append('..')
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
 from Game import Game
-from .OthelloLogic import Board
+from othello.OthelloLogic import Board
 import numpy as np
 
 class OthelloGame(Game):
@@ -100,6 +103,10 @@ class OthelloGame(Game):
         b = Board(self.n)
         b.pieces = np.copy(board)
         return b.countDiff(player)
+
+    def action_to_move(self,action):
+        move = (int(action/self.n), action%self.n)
+        return move
 
     @staticmethod
     def display(board):
