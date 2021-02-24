@@ -1,7 +1,16 @@
 import numpy as np
 import math
-from MCTS import MCTS
+from time import perf_counter
 from .OthelloGame import OthelloGame
+"""
+import os,sys,inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0,parentdir) 
+"""
+from MCTS import MCTS
+
+
 
 class RandomPlayer():
     def __init__(self, game):
@@ -18,6 +27,7 @@ class RandomPlayer():
 class HumanOthelloPlayer():
     def __init__(self, game):
         self.game = game
+        self.name = "Human"
 
     def play(self, board):
         # display(board)
@@ -46,6 +56,7 @@ class HumanOthelloPlayer():
 class GreedyOthelloPlayer():
     def __init__(self, game):
         self.game = game
+        self.name = "Greedy"
 
     def reset(self):
         return
@@ -66,32 +77,57 @@ class GreedyOthelloPlayer():
         random_best_indice = np.random.choice(best_indices)
         return candidates[random_best_indice][1]
 
-class MinimaxPlayer():
-    def __init__(self,game,depth):
+class MinimaxOthelloPlayer():
+    def __init__(self,game,depth,maxtime=0):
+        self.maxtime = maxtime
         self.game = game
         self.depth = depth
         self.alpha = -math.inf
         self.beta = math.inf
+        self.name = "Minimax"
 
     def play(self,board,deterministic=True):
         valids = self.game.getValidMoves(board, 1)
         candidates = []
-        for a in range(self.game.getActionSize()):
-            if valids[a]==0:
-                continue
-            nextBoard, _ = self.game.getNextState(board, 1, a)
-            score = self.minimax(nextBoard,-1,self.depth,self.alpha,self.beta)
-            candidates += [(-score, a)]
+
+        if self.maxtime == 0:
+            for a in range(self.game.getActionSize()):
+                if valids[a]==0:
+                    continue
+                nextBoard, _ = self.game.getNextState(board, 1, a)
+                score = self.minimax(nextBoard,-1,self.depth,self.alpha,self.beta)
+                candidates += [(-score, a)]
+        else:
+            start = perf_counter()
+            endtime = start + self.maxtime
+            for i in range(self.depth):
+                temp_candidates = []
+                for a in range(self.game.getActionSize()):
+                    if valids[a]==0:
+                        continue
+                    nextBoard, _ = self.game.getNextState(board, 1, a)
+                    score = self.minimax(nextBoard,-1,i,self.alpha,self.beta,endtime=endtime)
+                    temp_candidates += [(-score, a)]
+                if perf_counter() < endtime:
+                    candidates = temp_candidates
+                    print(i)
+                else:
+                    break
+        
         candidates.sort()
-        rand_options = []
         best_indices = [i for i,x in enumerate(candidates) if x[0]==candidates[0][0]]
         random_best_indice = np.random.choice(best_indices)
         return candidates[random_best_indice][1]
 
+
     def reset(self):
         return
     
-    def minimax(self,board,player,depth,alpha,beta):
+    def minimax(self,board,player,depth,alpha,beta,endtime=0):
+
+        if endtime != 0:
+            if perf_counter()>endtime:
+                return 0
         valids = self.game.getValidMoves(board,player)
         gameEnd = self.game.getGameEnded(board,player)
         if depth == 0 or gameEnd!=0:
@@ -107,7 +143,7 @@ class MinimaxPlayer():
                 if valids[a]==0:
                     continue
                 nextBoard, _ = self.game.getNextState(board,1,a)
-                score = max(score,self.minimax(nextBoard,-player,depth-1,alpha,beta))
+                score = max(score,self.minimax(nextBoard,-player,depth-1,alpha,beta,endtime))
                 alpha = max(alpha,score)
                 if alpha >= beta:
                     break
@@ -118,17 +154,18 @@ class MinimaxPlayer():
                 if valids[a]==0:
                     continue
                 nextBoard, _ = self.game.getNextState(board,-1,a)
-                score = min(score,self.minimax(nextBoard,-player,depth-1,alpha,beta))
+                score = min(score,self.minimax(nextBoard,-player,depth-1,alpha,beta,endtime))
                 beta = min(beta,score)
                 if beta <= alpha:
                     break
             return score
 
 class NeuralNetworkPlayer():
-    def __init__(self,game,nnet,args):
+    def __init__(self,game,nnet,args,name="NeuralPlayer"):
         self.game = game
         self.mctsStart = MCTS(game,nnet,args)
         self.mcts = MCTS(game,nnet,args)
+        self.name = name
 
     def reset(self):
         self.mcts = self.mctsStart
