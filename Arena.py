@@ -163,6 +163,10 @@ class Arena():
         print(names)
         df = pd.DataFrame(wins,columns=names,index=names)
         df2 = pd.DataFrame(draws,columns=names,index=names)
+
+        df.to_csv(r""+savefolder+"/wins.csv")
+        df2.to_csv(r""+savefolder+"/draws.csv")
+
         print(df)
         print(df2)
 

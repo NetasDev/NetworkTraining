@@ -31,6 +31,7 @@ class InteractiveBoard():
     def human_players_turn(self):
         if(self.player_to_move == 1 and isinstance(self.player1,HumanOthelloPlayer)) or (self.player_to_move==-1 and isinstance(self.player2,HumanOthelloPlayer)):
             return True
+            print("human move")
         return False
 
     def draw_field(self,screen):
@@ -119,16 +120,16 @@ class InteractiveBoard():
                             if moves[i]==1 and self.game.action_to_move(i)==(col,row):
                                 self.board, self.player_to_move = self.game.getNextState(self.board,self.player_to_move,i)
                                 self.board_history.append(self.board)
-                                self.move_history.append((self.player_to_move,(col,row)))
+                                self.move_history.append((self.player_to_move*-1,(col,row)))
 
             if not self.human_players_turn():
                 if self.player_to_move ==1:
-                    move = self.player2.play(self.game.getCanonicalForm(self.board,self.player_to_move))
+                    move = self.player1.play(self.game.getCanonicalForm(self.board,self.player_to_move))
                 else:
                     move = self.player2.play(self.game.getCanonicalForm(self.board,self.player_to_move))
                 self.board,self.player_to_move = self.game.getNextState(self.board,self.player_to_move,move)
                 self.board_history.append(self.board)
-                self.move_history.append((self.player_to_move,self.game.action_to_move(move)))
+                self.move_history.append((self.player_to_move*-1,self.game.action_to_move(move)))
 
             self.draw_field(screen)
             self.draw_side_board(screen)
