@@ -1,6 +1,10 @@
 import logging
+import pandas as pd
+import numpy as np
+import os
 
 from tqdm import tqdm
+from othello.OthelloInteractiveBoard import InteractiveBoard
 
 log = logging.getLogger(__name__)
 
@@ -28,7 +32,7 @@ class Arena():
         self.display = display
         self.det_turns = 0
 
-    def playGame(self, verbose=False):
+    def playGame(self, verbose=False,save=False):
         """
         Executes one episode of a game.
 
@@ -38,11 +42,12 @@ class Arena():
             or
                 draw result returned from the game that is neither 1, -1, nor 0.
         """
-
-
         self.player1.reset()
         self.player2.reset()
 
+        if save!= False:
+            InBoard = InteractiveBoard(self.game,self.player1,self.player2)
+            InBoard.board_history.append(InBoard.board)
 
         players = [self.player2, None, self.player1]
         curPlayer = 1
@@ -50,10 +55,12 @@ class Arena():
         it = 0
         while self.game.getGameEnded(board, curPlayer) == 0:
             it += 1
+            """
             if verbose:
                 assert self.display
                 print("Turn ", str(it), "Player ", str(curPlayer))
                 self.display(board)
+            """
             action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it>=3)
 
             valids = self.game.getValidMoves(self.game.getCanonicalForm(board, curPlayer), 1)
@@ -63,13 +70,24 @@ class Arena():
                 log.debug(f'valids = {valids}')
                 assert valids[action] > 0
             board, curPlayer = self.game.getNextState(board, curPlayer, action)
+
+            if save != False:
+                InBoard.board_history.append(board)
+                InBoard.move_history.append((curPlayer*-1,self.game.action_to_move(action)))
+        """
         if verbose:
             assert self.display
             print("Game over: Turn ", str(it), "Result ", str(self.game.getGameEnded(board, 1)))
             self.display(board)
+        """
+        if save != False:
+            i = 1
+            while os.path.isfile(save+"game"+str(i)+".pkl"):
+                i=i+1
+            InBoard.save(save+"game"+str(i))
         return curPlayer * self.game.getGameEnded(board, curPlayer)
 
-    def playGames(self, num, verbose=False):
+    def playGames(self, num, verbose=False,Interactive=False,save = False):
         """
         Plays num games in which player1 starts num/2 games and player2 starts
         num/2 games.
@@ -84,24 +102,72 @@ class Arena():
         oneWon = 0
         twoWon = 0
         draws = 0
+        i=1
+
         for _ in tqdm(range(num), desc="Arena.playGames (1)"):
-            gameResult = self.playGame(verbose=verbose)
+            
+            if Interactive == True:
+                InBoard = InteractiveBoard(self.game,self.player1,self.player2)
+                gameResult = InBoard.play_game()
+                print(gameResult)
+                if save != False:
+                    InBoard.save(save+"game"+str(i))
+            else:
+                gameResult = self.playGame(verbose=verbose,save=save)
             if gameResult == 1:
                 oneWon += 1
             elif gameResult == -1:
                 twoWon += 1
             else:
                 draws += 1
+            i+=1
 
         self.player1, self.player2 = self.player2, self.player1
+        i = 1
 
         for _ in tqdm(range(num), desc="Arena.playGames (2)"):
-            gameResult = self.playGame(verbose=verbose)
+            if Interactive == True:
+                InBoard = InteractiveBoard(self.game,self.player1,self.player2)
+                gameResult = InBoard.play_game()
+                print(gameResult)
+                if save != False:
+                    InBoard.save(save+"game"+str(i))
+            else:
+                gameResult = self.playGame(verbose=verbose,save=save)
             if gameResult == -1:
                 oneWon += 1
             elif gameResult == 1:
                 twoWon += 1
             else:
                 draws += 1
-
+            i+=1
         return oneWon, twoWon, draws
+
+    @staticmethod
+    def play_tournament(players,num_matches,game,det_turns,savefolder=False):
+        wins = np.zeros((len(players),len(players)),dtype=int)
+        draws = np.zeros((len(players),len(players)),dtype=int)
+        names = []
+
+        for i in range(len(players)):
+            names.append(players[i].name)
+            for j in range(len(players)):
+                if i!=j:
+                    if savefolder!= False:
+                        save = savefolder +"/"+ players[i].name +"VS" +players[j].name+"/"
+                    else:
+                        save = False
+                    arena = Arena(players[i],players[j],game,det_turns=det_turns)
+                    wins[i][j],_,draws[i][j] = arena.playGames(num_matches,save=save)
+
+        print(names)
+        df = pd.DataFrame(wins,columns=names,index=names)
+        df2 = pd.DataFrame(draws,columns=names,index=names)
+        print(df)
+        print(df2)
+
+        np.savetxt('wins',wins,delimiter = " ")
+        np.savetxt('draws',draws,delimiter=" ")
+
+    
+
