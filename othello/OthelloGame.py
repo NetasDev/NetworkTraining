@@ -108,6 +108,24 @@ class OthelloGame(Game):
         move = (int(action/self.n), action%self.n)
         return move
 
+    def get_num_corner_stones(self,player,board):
+        score = 0
+        for x,y in ((0,0),(0,self.n-1),(self.n-1,0),(self.n-1,self.n-1)):
+            if board[x][y]==player:
+                score += 1
+    """
+    def get_corner_heuristic_value(self,maxplayer,board):
+        max_corner_value = self.get_num_corner_stones(maxplayer,board)
+        min_corner_value = self.get_num_corner_stones(maxplayer*-1,board)
+        if(max_corner_value+min_corner_value)!=0:
+            return 100*(max_corner_value)
+        else:
+            return 0
+    """
+    
+    def 
+
+
     @staticmethod
     def display(board):
         n = board.shape[0]

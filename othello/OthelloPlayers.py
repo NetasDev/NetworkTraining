@@ -89,29 +89,33 @@ class MinimaxOthelloPlayer():
     def play(self,board,deterministic=True):
         valids = self.game.getValidMoves(board, 1)
         candidates = []
+        if self.depth == 0:
+            print("depth has to be atleast 1")
 
         if self.maxtime == 0:
             for a in range(self.game.getActionSize()):
                 if valids[a]==0:
                     continue
                 nextBoard, _ = self.game.getNextState(board, 1, a)
-                score = self.minimax(nextBoard,-1,self.depth,self.alpha,self.beta)
+                score = self.minimax(nextBoard,-1,self.depth-1,self.alpha,self.beta)
                 candidates += [(-score, a)]
         else:
             start = perf_counter()
             endtime = start + self.maxtime
-            for i in range(self.depth):
+            for i in range(1,self.depth+1):
+                
                 temp_candidates = []
                 for a in range(self.game.getActionSize()):
                     if valids[a]==0:
                         continue
                     nextBoard, _ = self.game.getNextState(board, 1, a)
-                    score = self.minimax(nextBoard,-1,i,self.alpha,self.beta,endtime=endtime)
+                    score = self.minimax(nextBoard,-1,i-1,self.alpha,self.beta,endtime=endtime)
                     temp_candidates += [(-score, a)]
                 if perf_counter() < endtime:
                     candidates = temp_candidates
-                    print(i)
+                    
                 else:
+                    print("depth: "+str(i))
                     break
         
         candidates.sort()

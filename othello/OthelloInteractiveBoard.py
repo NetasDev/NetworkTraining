@@ -60,8 +60,10 @@ class InteractiveBoard():
 
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,550),"Player 2:",(0,0,0))
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,600),self.player2_name,(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,650),str(self.get_last_move(-1)),(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,700),str(self.game.getScore(self.board,-1)),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,650),"Last Move:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,650),str(self.get_last_move(-1)),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,700),"Score:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,700),str(self.game.getScore(self.board,-1)),(0,0,0))
         
         
 
