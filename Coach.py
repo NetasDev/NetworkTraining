@@ -83,7 +83,7 @@ class Coach():
         time_this_iteration = start_time
         all_time_selfplay = 0
         all_time_training = 0
-        all_time_tournament = 0
+        all_time_validation = 0
         all_wins = 0
         all_looses = 0
         all_draws = 0
@@ -138,12 +138,15 @@ class Coach():
             
             #nmcts = MCTS(self.game, self.nnet, self.args)
 
-            # end of selfplay/start of tournament
-            start_time_tournament = perf_counter()
+            # end of selfplay/start of validation
+            start_time_validation = perf_counter()
             log.info('PITTING AGAINST PREVIOUS VERSION')
 
             arena = Arena(pmctsplayer,nmctsplayer,self.game,2)
             pwins, nwins, draws = arena.playGames(self.args.arenaCompare)
+            print(pwins)
+            print(nwins)
+            print(draws)
 
             log.info('NEW/PREV WINS : %d / %d ; DRAWS : %d' % (nwins, pwins, draws))
             if pwins + nwins == 0 or float(nwins) / (pwins + nwins) < self.args.updateThreshold:
@@ -155,36 +158,35 @@ class Coach():
                 self.nnet.save_checkpoint(folder=self.args.checkpoint, filename='best')
                 generation = generation + 1
 
-            # end of tournament
+            # end of Validation
             # wandb speicherung anfang
-            end_time_tournament = perf_counter()
+            end_time_validation = perf_counter()
             time_this_iteration = perf_counter() - time_this_iteration
             all_time = perf_counter()-start_time
 
             selfplay_time_iteration = start_time_training - start_time_selfplay
-            training_time_iteration = start_time_tournament - start_time_training
-            tournament_time_iteration = end_time_tournament- start_time_tournament
+            training_time_iteration = start_time_validation - start_time_training
+            validation_time_iteration = end_time_validation- start_time_validation
 
             all_time_selfplay = all_time_selfplay + start_time_training - start_time_selfplay
-            all_time_training = all_time_training + start_time_tournament - start_time_training
-            all_time_tournament = all_time_tournament + end_time_tournament- start_time_tournament
+            all_time_training = all_time_training + start_time_validation - start_time_training
+            all_time_validation = all_time_validation + end_time_validation- start_time_validation
 
             games = pwins+nwins+draws
-            all_wins = all_wins + pwins 
-            all_looses = all_looses + nwins
+            all_wins = all_wins + nwins 
+            all_looses = all_looses + pwins
             all_draws = all_draws + draws
             all_games = all_games + pwins + nwins + draws
             
-
-            wandb.log({"Wins":pwins,"Losses":nwins,"Draws":draws,"Winrate":pwins/games,"Overall Winrate":all_wins/all_games,
-            "Overall Drawrate":all_draws/all_games,"Time":all_time,"Selfplaytime Iteration":selfplay_time_iteration,
-            "Trainingtime Iteration":training_time_iteration,"Tournamenttime Iteration":tournament_time_iteration,
-            "Selfplaytime Iteration %":selfplay_time_iteration*100/time_this_iteration,
-            "Traingtime Iteration %":training_time_iteration*100/time_this_iteration,
-            "Tournamenttime Iteration %":tournament_time_iteration*100/time_this_iteration,
-            "Selfplaytime":all_time_selfplay,"Selfplaytime %":all_time_selfplay*100/all_time,
-            "Trainingtime":all_time_training,"Trainingtime %":all_time_training*100/all_time,
-            "Tournamenttime":all_time_tournament,"Tournamenttime %":all_time_tournament*100/all_time,
+            wandb.log({"Wins":nwins,"Losses":pwins,"Draws":draws,"Win-Rate":nwins/games,"Overall Win-Rate":all_wins/all_games,
+            "Overall Draw-Rate":all_draws/all_games,"Time":all_time,"Selfplay-Time Iteration":selfplay_time_iteration,
+            "Training-Time Iteration":training_time_iteration,"Validation-Time Iteration":validation_time_iteration,
+            "Selfplay-Time Iteration %":selfplay_time_iteration*100/time_this_iteration,
+            "Traing-Time Iteration %":training_time_iteration*100/time_this_iteration,
+            "Validation-Time Iteration %":validation_time_iteration*100/time_this_iteration,
+            "Selfplay-Time":all_time_selfplay,"Selfplay-Time %":all_time_selfplay*100/all_time,
+            "Training-Time":all_time_training,"Training-Time %":all_time_training*100/all_time,
+            "Validation-Time":all_time_validation,"Validation-Time %":all_time_validation*100/all_time,
             "Generation":generation,"loss":loss,"pi_loss":pi_loss,"v_loss":v_loss
             })
 
@@ -218,3 +220,6 @@ class Coach():
 
             # examples based on the model were already collected (loaded)
             self.skipFirstSelfPlay = True
+
+
+        
