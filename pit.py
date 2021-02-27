@@ -70,12 +70,13 @@ If a save path is set for the tournament,there will be new folders created with 
 matched against each other and the games will be saved in there.
 """
 
+"""
 players = []
 players.append(greed)
 players.append(minimax)
 players.append(minimax2)
 Arena.Arena.play_tournament(players,2,game,2,savefolder="./newFolder/tournament")
-
+""""
 
 
 

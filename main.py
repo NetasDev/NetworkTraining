@@ -18,22 +18,22 @@ args = dotdict({
     'tempThreshold': 15,        #
     'updateThreshold': 0.6,     # During arena playoff, new neural net will be accepted if threshold or more of games are won.
     'maxlenOfQueue': 200000,      # Number of game examples to train the neural networks.
-    'numMCTSSims': 25,          # Number of games moves for MCTS to simulate.
+    'numMCTSSims': 50,          # Number of games moves for MCTS to simulate.
     'arenaCompare': 20,         # Number of games to play during arena play to determine if new net will be accepted.
     'cpuct': 1,
 
-    'checkpoint': './temp/EPStest/40/',
+    'checkpoint': './temp/Othello8x8/EPStest/40/',
     'load_model': False,
     'load_folder_file': ('/dev/models/8x100x50','best'),
     'numItersForTrainExamplesHistory': 20,
-    'maxtime': 500,
+    'maxtime': 14400,
 
-    'wandb_project':'EpsTest2'
+    'wandb_project':'Othello8/EPStest'
 })
 
 def main():
     log.info('Loading %s...', Game.__name__)
-    g = Game(6)
+    g = Game(8)
 
     log.info('Loading %s...', nn.__name__)
     nnet = nn(g)
@@ -59,10 +59,10 @@ def main():
 
 
 main()
-args.checkpoint = './temp/EPStest2/80/'
+args.checkpoint = './temp/Othello8x8/EPStest/80/'
 args.numEps = 80
 main()
-args.checkpoint = './temp/EPStest2/160/'
+args.checkpoint = './temp/Othello8x8/EPStest/160/'
 args.numEps = 160
 main()
 
