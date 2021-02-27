@@ -29,6 +29,7 @@ from the target folder with the given filename
 Also a dotdict including atleast numMCTSSims (the number of MCTS Simulations done each turn) and cpuct(a factor for exploration, normally 1)
 has to be created.
 """
+"""
 network = nn(game)
 network.load_checkpoint(folder="./temp/new",filename="best")
 args = dotdict({'numMCTSSims': 50, 'cpuct': 1.0})
@@ -37,7 +38,7 @@ neuralplayer = NeuralNetworkPlayer(game,network,args)
 network2 = nn(game)
 network2.load_checkpoint(folder="./temp/new",filename="checkpoint_12")
 neuralplayer2 = NeuralNetworkPlayer(game,network2,args)
-
+"""
 """
 Tk Once the Players are created, they can be matched against each other 1vs1 by creating an arena Object
 This Object needs both players and the game to be played to be initialized.

@@ -1,4 +1,4 @@
-name: testenv
+name: testenv2
 channels:
   - defaults
 dependencies:
@@ -7,5 +7,7 @@ dependencies:
   - hdf5=1.10.4
   - pytorch
   - pandas
+
+
 prefix: C:\Users\tobia\anaconda3\envs\testenv
 
