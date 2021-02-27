@@ -1,203 +1,0 @@
-[32m2021-02-26 14:00:53[0m [35mtobias-System-Product-Name[0m [34m__main__[15584][0m [1;30mINFO[0m Starting the learning process 🎉
-[32m2021-02-26 14:00:53[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m Starting Iter #1 ...
-Self Play:   0%|          | 0/10 [00:00<?, ?it/s]2021-02-26 14:00:53.615667: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
-2021-02-26 14:00:53.645609: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-26 14:00:53.645929: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
-name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.683
-pciBusID: 0000:01:00.0
-2021-02-26 14:00:53.646075: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
-2021-02-26 14:00:53.646850: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
-2021-02-26 14:00:53.647558: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
-2021-02-26 14:00:53.647750: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
-2021-02-26 14:00:53.648651: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
-2021-02-26 14:00:53.649341: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
-2021-02-26 14:00:53.651466: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
-2021-02-26 14:00:53.651556: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-26 14:00:53.651951: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-26 14:00:53.652256: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
-2021-02-26 14:00:53.652572: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
-2021-02-26 14:00:53.656392: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 4200000000 Hz
-2021-02-26 14:00:53.656614: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55b5db5218c0 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
-2021-02-26 14:00:53.656630: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
-2021-02-26 14:00:53.656777: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-26 14:00:53.657282: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
-name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.683
-pciBusID: 0000:01:00.0
-2021-02-26 14:00:53.657346: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
-2021-02-26 14:00:53.657368: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
-2021-02-26 14:00:53.657379: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
-2021-02-26 14:00:53.657389: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
-2021-02-26 14:00:53.657400: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
-2021-02-26 14:00:53.657416: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
-2021-02-26 14:00:53.657430: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
-2021-02-26 14:00:53.657498: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-26 14:00:53.658232: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-26 14:00:53.658550: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
-2021-02-26 14:00:53.658595: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
-2021-02-26 14:00:53.732073: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
-2021-02-26 14:00:53.732090: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
-2021-02-26 14:00:53.732096: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
-2021-02-26 14:00:53.735194: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-26 14:00:53.735788: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-26 14:00:53.736186: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-26 14:00:53.736524: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10141 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:01:00.0, compute capability: 6.1)
-2021-02-26 14:00:53.737707: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55b5dccd2f30 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
-2021-02-26 14:00:53.737720: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce GTX 1080 Ti, Compute Capability 6.1
-2021-02-26 14:00:54.346928: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
-2021-02-26 14:00:54.440886: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
-2021-02-26 14:00:54.803742: W tensorflow/stream_executor/cuda/redzone_allocator.cc:312] Not found: ./bin/ptxas not found
-Relying on driver to perform ptx compilation. This message will be only logged once.
-Self Play:  10%|█         | 1/10 [00:04<00:37,  4.12s/it]Self Play:  20%|██        | 2/10 [00:06<00:25,  3.19s/it]Self Play:  30%|███       | 3/10 [00:09<00:20,  2.99s/it]Self Play:  40%|████      | 4/10 [00:12<00:17,  2.92s/it]Self Play:  50%|█████     | 5/10 [00:15<00:14,  2.94s/it]Self Play:  60%|██████    | 6/10 [00:17<00:11,  2.89s/it]Self Play:  70%|███████   | 7/10 [00:20<00:08,  2.87s/it]Self Play:  80%|████████  | 8/10 [00:23<00:05,  2.86s/it]Self Play:  90%|█████████ | 9/10 [00:26<00:02,  2.84s/it]Self Play: 100%|██████████| 10/10 [00:29<00:00,  2.82s/it]Self Play: 100%|██████████| 10/10 [00:29<00:00,  2.92s/it]
-Checkpoint Directory exists! 
-WARNING:tensorflow:From /home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/ops/init_ops.py:97: calling GlorotUniform.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
-Instructions for updating:
-Call initializer instance with the dtype argument instead of passing it to the constructor
-[32m2021-02-26 14:01:23[0m [35mtobias-System-Product-Name[0m [34mtensorflow[15584][0m [1;30mWARNING[0m [33mFrom /home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/ops/init_ops.py:97: calling GlorotUniform.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
-Instructions for updating:
-Call initializer instance with the dtype argument instead of passing it to the constructor[0m
-WARNING:tensorflow:From /home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/ops/init_ops.py:97: calling Zeros.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
-Instructions for updating:
-Call initializer instance with the dtype argument instead of passing it to the constructor
-[32m2021-02-26 14:01:23[0m [35mtobias-System-Product-Name[0m [34mtensorflow[15584][0m [1;30mWARNING[0m [33mFrom /home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/ops/init_ops.py:97: calling Zeros.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
-Instructions for updating:
-Call initializer instance with the dtype argument instead of passing it to the constructor[0m
-WARNING:tensorflow:From /home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/ops/init_ops.py:97: calling Ones.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
-Instructions for updating:
-Call initializer instance with the dtype argument instead of passing it to the constructor
-[32m2021-02-26 14:01:23[0m [35mtobias-System-Product-Name[0m [34mtensorflow[15584][0m [1;30mWARNING[0m [33mFrom /home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/ops/init_ops.py:97: calling Ones.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
-Instructions for updating:
-Call initializer instance with the dtype argument instead of passing it to the constructor[0m
-Train on 200 samples
-Epoch 1/10
- 64/200 [========>.....................] - ETA: 1s - loss: 6.1316 - pi_loss: 4.3289 - v_loss: 1.8027200/200 [==============================] - 1s 3ms/sample - loss: 4.8195 - pi_loss: 4.1806 - v_loss: 0.5070
-Epoch 2/10
- 64/200 [========>.....................] - ETA: 0s - loss: 3.1095 - pi_loss: 2.9745 - v_loss: 0.1349200/200 [==============================] - 0s 270us/sample - loss: 3.0914 - pi_loss: 3.0436 - v_loss: 0.1736
-Epoch 3/10
- 64/200 [========>.....................] - ETA: 0s - loss: 2.3441 - pi_loss: 2.2684 - v_loss: 0.0757200/200 [==============================] - 0s 258us/sample - loss: 2.5574 - pi_loss: 2.5344 - v_loss: 0.3527
-Epoch 4/10
- 64/200 [========>.....................] - ETA: 0s - loss: 2.1745 - pi_loss: 2.1700 - v_loss: 0.0044200/200 [==============================] - 0s 255us/sample - loss: 2.2417 - pi_loss: 2.1903 - v_loss: 0.3055
-Epoch 5/10
- 64/200 [========>.....................] - ETA: 0s - loss: 2.1164 - pi_loss: 2.1045 - v_loss: 0.0119200/200 [==============================] - 0s 258us/sample - loss: 2.1376 - pi_loss: 2.0788 - v_loss: 0.0552
-Epoch 6/10
- 64/200 [========>.....................] - ETA: 0s - loss: 1.8588 - pi_loss: 1.8041 - v_loss: 0.0548200/200 [==============================] - 0s 249us/sample - loss: 1.9468 - pi_loss: 2.1019 - v_loss: 0.0648
-Epoch 7/10
- 64/200 [========>.....................] - ETA: 0s - loss: 1.8228 - pi_loss: 1.8226 - v_loss: 2.0622e-04200/200 [==============================] - 0s 251us/sample - loss: 1.7978 - pi_loss: 1.9700 - v_loss: 0.0198
-Epoch 8/10
- 64/200 [========>.....................] - ETA: 0s - loss: 1.4508 - pi_loss: 1.4447 - v_loss: 0.0060200/200 [==============================] - 0s 251us/sample - loss: 1.6652 - pi_loss: 1.7347 - v_loss: 0.2602
-Epoch 9/10
- 64/200 [========>.....................] - ETA: 0s - loss: 1.5322 - pi_loss: 1.5258 - v_loss: 0.0064200/200 [==============================] - 0s 260us/sample - loss: 1.5774 - pi_loss: 1.6756 - v_loss: 0.0182
-Epoch 10/10
- 64/200 [========>.....................] - ETA: 0s - loss: 1.6493 - pi_loss: 1.6477 - v_loss: 0.0016200/200 [==============================][32m2021-02-26 14:01:25[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m PITTING AGAINST PREVIOUS VERSION
- - 0s 252us/sample - loss: 1.5556 - pi_loss: 1.6823 - v_loss: 0.0164
-Arena.playGames (1):   0%|          | 0/5 [00:00<?, ?it/s]Arena.playGames (1):  20%|██        | 1/5 [00:03<00:12,  3.18s/it]Arena.playGames (1):  40%|████      | 2/5 [00:06<00:09,  3.02s/it]Arena.playGames (1):  60%|██████    | 3/5 [00:08<00:05,  2.92s/it]Arena.playGames (1):  80%|████████  | 4/5 [00:11<00:02,  2.91s/it]Arena.playGames (1): 100%|██████████| 5/5 [00:14<00:00,  2.88s/it]Arena.playGames (1): 100%|██████████| 5/5 [00:14<00:00,  2.92s/it]
-Arena.playGames (2):   0%|          | 0/5 [00:00<?, ?it/s]Arena.playGames (2):  20%|██        | 1/5 [00:02<00:11,  2.77s/it]Arena.playGames (2):  40%|████      | 2/5 [00:05<00:08,  2.89s/it]Arena.playGames (2):  60%|██████    | 3/5 [00:08<00:05,  2.92s/it]Arena.playGames (2):  80%|████████  | 4/5 [00:11<00:02,  2.94s/it]Arena.playGames (2): 100%|██████████| 5/5 [00:14<00:00,  2.95s/it]Checkpoint Directory exists! 
-Arena.playGames (2): 100%|██████████| 5/5 [00:14<00:00,  2.93s/it]
-[32m2021-02-26 14:01:54[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m NEW/PREV WINS : 6 / 4 ; DRAWS : 0
-[32m2021-02-26 14:01:54[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m ACCEPTING NEW MODEL
-Checkpoint Directory exists! 
-[32m2021-02-26 14:01:57[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m Starting Iter #2 ...
-Self Play:   0%|          | 0/10 [00:00<?, ?it/s]Self Play:  10%|█         | 1/10 [00:02<00:23,  2.60s/it]Self Play:  20%|██        | 2/10 [00:05<00:21,  2.67s/it]Self Play:  30%|███       | 3/10 [00:08<00:19,  2.75s/it]Self Play:  40%|████      | 4/10 [00:10<00:16,  2.70s/it]Self Play:  50%|█████     | 5/10 [00:13<00:13,  2.76s/it]Self Play:  60%|██████    | 6/10 [00:16<00:10,  2.75s/it]Self Play:  70%|███████   | 7/10 [00:19<00:08,  2.79s/it]Self Play:  80%|████████  | 8/10 [00:22<00:05,  2.80s/it]Self Play:  90%|█████████ | 9/10 [00:24<00:02,  2.79s/it]Self Play: 100%|██████████| 10/10 [00:27<00:00,  2.82s/it]Self Play: 100%|██████████| 10/10 [00:27<00:00,  2.77s/it]
-Checkpoint Directory exists! 
-Train on 400 samples
-Epoch 1/10
- 64/400 [===>..........................] - ETA: 0s - loss: 2.5960 - pi_loss: 2.4592 - v_loss: 0.1368320/400 [=======================>......] - ETA: 0s - loss: 2.5552 - pi_loss: 2.4791 - v_loss: 0.0760400/400 [==============================] - 0s 595us/sample - loss: 2.6761 - pi_loss: 2.6487 - v_loss: 0.1059
-Epoch 2/10
- 64/400 [===>..........................] - ETA: 0s - loss: 2.4292 - pi_loss: 2.3363 - v_loss: 0.0929320/400 [=======================>......] - ETA: 0s - loss: 2.4193 - pi_loss: 2.3813 - v_loss: 0.0379400/400 [==============================] - 0s 252us/sample - loss: 2.4033 - pi_loss: 2.3537 - v_loss: 0.0692
-Epoch 3/10
- 64/400 [===>..........................] - ETA: 0s - loss: 2.1066 - pi_loss: 2.0791 - v_loss: 0.0274320/400 [=======================>......] - ETA: 0s - loss: 2.0612 - pi_loss: 2.0459 - v_loss: 0.0153400/400 [==============================] - 0s 230us/sample - loss: 2.0860 - pi_loss: 2.1000 - v_loss: 0.0764
-Epoch 4/10
- 64/400 [===>..........................] - ETA: 0s - loss: 2.0254 - pi_loss: 1.9720 - v_loss: 0.0534320/400 [=======================>......] - ETA: 0s - loss: 1.8364 - pi_loss: 1.7990 - v_loss: 0.0374400/400 [==============================] - 0s 241us/sample - loss: 1.8386 - pi_loss: 1.8585 - v_loss: 0.0453
-Epoch 5/10
- 64/400 [===>..........................] - ETA: 0s - loss: 1.5711 - pi_loss: 1.5499 - v_loss: 0.0212320/400 [=======================>......] - ETA: 0s - loss: 1.6382 - pi_loss: 1.5973 - v_loss: 0.0409400/400 [==============================] - 0s 232us/sample - loss: 1.6342 - pi_loss: 1.5880 - v_loss: 0.0303
-Epoch 6/10
- 64/400 [===>..........................] - ETA: 0s - loss: 1.2904 - pi_loss: 1.2749 - v_loss: 0.0155320/400 [=======================>......] - ETA: 0s - loss: 1.4672 - pi_loss: 1.4056 - v_loss: 0.0616400/400 [==============================] - 0s 233us/sample - loss: 1.4883 - pi_loss: 1.4957 - v_loss: 0.0555
-Epoch 7/10
- 64/400 [===>..........................] - ETA: 0s - loss: 1.4078 - pi_loss: 1.4052 - v_loss: 0.0026320/400 [=======================>......] - ETA: 0s - loss: 1.3518 - pi_loss: 1.3296 - v_loss: 0.0222400/400 [==============================] - 0s 228us/sample - loss: 1.3537 - pi_loss: 1.2907 - v_loss: 0.0727
-Epoch 8/10
- 64/400 [===>..........................] - ETA: 0s - loss: 1.1489 - pi_loss: 1.1399 - v_loss: 0.0090320/400 [=======================>......] - ETA: 0s - loss: 1.1923 - pi_loss: 1.1857 - v_loss: 0.0066400/400 [==============================] - 0s 232us/sample - loss: 1.1954 - pi_loss: 1.1922 - v_loss: 0.0051
-Epoch 9/10
- 64/400 [===>..........................] - ETA: 0s - loss: 1.1946 - pi_loss: 1.1770 - v_loss: 0.0176320/400 [=======================>......] - ETA: 0s - loss: 1.1225 - pi_loss: 1.1077 - v_loss: 0.0148400/400 [==============================] - 0s 234us/sample - loss: 1.1294 - pi_loss: 1.0978 - v_loss: 0.0485
-Epoch 10/10
- 64/400 [===>..........................] - ETA: 0s - loss: 1.1780 - pi_loss: 1.1775 - v_loss: 4.3476e-04320/400 [=======================>......] - ETA: 0s - loss: 1.0073 - pi_loss: 1.0030 - v_loss: 0.0043    400/400 [==============================] - 0s 229us/sample - loss: 1.0321 - pi_loss: 1.0544 - v_loss: 0.0034
-[32m2021-02-26 14:02:29[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m PITTING AGAINST PREVIOUS VERSION
-Arena.playGames (1):   0%|          | 0/5 [00:00<?, ?it/s]Arena.playGames (1):  20%|██        | 1/5 [00:03<00:13,  3.33s/it]Arena.playGames (1):  40%|████      | 2/5 [00:06<00:09,  3.19s/it]Arena.playGames (1):  60%|██████    | 3/5 [00:09<00:06,  3.17s/it]Arena.playGames (1):  80%|████████  | 4/5 [00:12<00:03,  3.12s/it]Arena.playGames (1): 100%|██████████| 5/5 [00:15<00:00,  3.15s/it]Arena.playGames (1): 100%|██████████| 5/5 [00:15<00:00,  3.16s/it]
-Arena.playGames (2):   0%|          | 0/5 [00:00<?, ?it/s]Arena.playGames (2):  20%|██        | 1/5 [00:03<00:12,  3.16s/it]Arena.playGames (2):  40%|████      | 2/5 [00:06<00:09,  3.08s/it]Arena.playGames (2):  60%|██████    | 3/5 [00:09<00:06,  3.07s/it]Arena.playGames (2):  80%|████████  | 4/5 [00:12<00:03,  3.07s/it]Arena.playGames (2): 100%|██████████| 5/5 [00:15<00:00,  3.07s/it]Arena.playGames (2): 100%|██████████| 5/5 [00:15<00:00,  3.07s/it]
-[32m2021-02-26 14:03:00[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m NEW/PREV WINS : 1 / 9 ; DRAWS : 0
-[32m2021-02-26 14:03:00[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m REJECTING NEW MODEL
-[32m2021-02-26 14:03:02[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m Starting Iter #3 ...
-Self Play:   0%|          | 0/10 [00:00<?, ?it/s]Self Play:  10%|█         | 1/10 [00:03<00:30,  3.44s/it]Self Play:  20%|██        | 2/10 [00:06<00:24,  3.11s/it]Self Play:  30%|███       | 3/10 [00:09<00:21,  3.07s/it]Self Play:  40%|████      | 4/10 [00:12<00:17,  2.99s/it]Self Play:  50%|█████     | 5/10 [00:15<00:15,  3.01s/it]Self Play:  60%|██████    | 6/10 [00:18<00:12,  3.05s/it]Self Play:  70%|███████   | 7/10 [00:21<00:09,  3.01s/it]Self Play:  80%|████████  | 8/10 [00:24<00:06,  3.06s/it]Self Play:  90%|█████████ | 9/10 [00:27<00:03,  3.02s/it]Self Play: 100%|██████████| 10/10 [00:30<00:00,  3.06s/it]Self Play: 100%|██████████| 10/10 [00:30<00:00,  3.06s/it]
-Checkpoint Directory exists! 
-Train on 600 samples
-Epoch 1/10
- 64/600 [==>...........................] - ETA: 3s - loss: 3.7380 - pi_loss: 3.0254 - v_loss: 0.7125320/600 [===============>..............] - ETA: 0s - loss: 3.7256 - pi_loss: 3.1332 - v_loss: 0.5925576/600 [===========================>..] - ETA: 0s - loss: 3.5690 - pi_loss: 3.1270 - v_loss: 0.4420600/600 [==============================] - 1s 1ms/sample - loss: 3.5460 - pi_loss: 3.0856 - v_loss: 0.4257
-Epoch 2/10
- 64/600 [==>...........................] - ETA: 0s - loss: 3.2763 - pi_loss: 2.9797 - v_loss: 0.2966320/600 [===============>..............] - ETA: 0s - loss: 3.1369 - pi_loss: 2.8239 - v_loss: 0.3131576/600 [===========================>..] - ETA: 0s - loss: 3.0402 - pi_loss: 2.7519 - v_loss: 0.2883600/600 [==============================] - 0s 237us/sample - loss: 3.0207 - pi_loss: 2.7292 - v_loss: 0.2622
-Epoch 3/10
- 64/600 [==>...........................] - ETA: 0s - loss: 2.5415 - pi_loss: 2.3561 - v_loss: 0.1854320/600 [===============>..............] - ETA: 0s - loss: 2.3776 - pi_loss: 2.2230 - v_loss: 0.1546576/600 [===========================>..] - ETA: 0s - loss: 2.3904 - pi_loss: 2.2519 - v_loss: 0.1385600/600 [==============================] - 0s 225us/sample - loss: 2.4163 - pi_loss: 2.3117 - v_loss: 0.1435
-Epoch 4/10
- 64/600 [==>...........................] - ETA: 0s - loss: 2.1147 - pi_loss: 2.0299 - v_loss: 0.0848320/600 [===============>..............] - ETA: 0s - loss: 2.0993 - pi_loss: 2.0162 - v_loss: 0.0830576/600 [===========================>..] - ETA: 0s - loss: 2.0803 - pi_loss: 2.0144 - v_loss: 0.0659600/600 [==============================] - 0s 223us/sample - loss: 2.0990 - pi_loss: 2.0402 - v_loss: 0.0868
-Epoch 5/10
- 64/600 [==>...........................] - ETA: 0s - loss: 1.6970 - pi_loss: 1.6390 - v_loss: 0.0580320/600 [===============>..............] - ETA: 0s - loss: 1.7850 - pi_loss: 1.7122 - v_loss: 0.0728576/600 [===========================>..] - ETA: 0s - loss: 1.8358 - pi_loss: 1.7584 - v_loss: 0.0774600/600 [==============================] - 0s 227us/sample - loss: 1.8335 - pi_loss: 1.7481 - v_loss: 0.0820
-Epoch 6/10
- 64/600 [==>...........................] - ETA: 0s - loss: 1.6504 - pi_loss: 1.5848 - v_loss: 0.0655320/600 [===============>..............] - ETA: 0s - loss: 1.5250 - pi_loss: 1.4868 - v_loss: 0.0382576/600 [===========================>..] - ETA: 0s - loss: 1.5944 - pi_loss: 1.5495 - v_loss: 0.0448600/600 [==============================] - 0s 224us/sample - loss: 1.6099 - pi_loss: 1.5927 - v_loss: 0.0404
-Epoch 7/10
- 64/600 [==>...........................] - ETA: 0s - loss: 1.2427 - pi_loss: 1.2198 - v_loss: 0.0229320/600 [===============>..............] - ETA: 0s - loss: 1.4134 - pi_loss: 1.3925 - v_loss: 0.0209576/600 [===========================>..] - ETA: 0s - loss: 1.3855 - pi_loss: 1.3655 - v_loss: 0.0200600/600 [==============================] - 0s 229us/sample - loss: 1.4055 - pi_loss: 1.4150 - v_loss: 0.0205
-Epoch 8/10
- 64/600 [==>...........................] - ETA: 0s - loss: 1.0694 - pi_loss: 1.0579 - v_loss: 0.0116320/600 [===============>..............] - ETA: 0s - loss: 1.3071 - pi_loss: 1.2749 - v_loss: 0.0322576/600 [===========================>..] - ETA: 0s - loss: 1.2676 - pi_loss: 1.2382 - v_loss: 0.0294600/600 [==============================] - 0s 227us/sample - loss: 1.2834 - pi_loss: 1.2806 - v_loss: 0.0265
-Epoch 9/10
- 64/600 [==>...........................] - ETA: 0s - loss: 0.8350 - pi_loss: 0.8193 - v_loss: 0.0157320/600 [===============>..............] - ETA: 0s - loss: 1.0842 - pi_loss: 1.0657 - v_loss: 0.0185576/600 [===========================>..] - ETA: 0s - loss: 1.1403 - pi_loss: 1.1140 - v_loss: 0.0263600/600 [==============================] - 0s 230us/sample - loss: 1.1393 - pi_loss: 1.1140 - v_loss: 0.0239
-Epoch 10/10
- 64/600 [==>...........................] - ETA: 0s - loss: 1.1795 - pi_loss: 1.1563 - v_loss: 0.0232320/600 [===============>..............] - ETA: 0s - loss: 1.0456 - pi_loss: 1.0239 - v_loss: 0.0217576/600 [===========================>..] - ETA: 0s - loss: 1.0300 - pi_loss: 1.0097 - v_loss: 0.0203[32m2021-02-26 14:03:39[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m PITTING AGAINST PREVIOUS VERSION
-600/600 [==============================] - 0s 227us/sample - loss: 1.0269 - pi_loss: 1.0026 - v_loss: 0.0197
-Arena.playGames (1):   0%|          | 0/5 [00:00<?, ?it/s]Arena.playGames (1):  20%|██        | 1/5 [00:03<00:14,  3.54s/it]Arena.playGames (1):  40%|████      | 2/5 [00:06<00:10,  3.39s/it]Arena.playGames (1):  60%|██████    | 3/5 [00:09<00:06,  3.26s/it]Arena.playGames (1):  80%|████████  | 4/5 [00:13<00:03,  3.20s/it]Arena.playGames (1): 100%|██████████| 5/5 [00:16<00:00,  3.17s/it]Arena.playGames (1): 100%|██████████| 5/5 [00:16<00:00,  3.23s/it]
-Arena.playGames (2):   0%|          | 0/5 [00:00<?, ?it/s]Arena.playGames (2):  20%|██        | 1/5 [00:03<00:12,  3.16s/it]Arena.playGames (2):  40%|████      | 2/5 [00:06<00:09,  3.26s/it]Arena.playGames (2):  60%|██████    | 3/5 [00:09<00:06,  3.18s/it]Arena.playGames (2):  80%|████████  | 4/5 [00:12<00:03,  3.22s/it]Arena.playGames (2): 100%|██████████| 5/5 [00:16<00:00,  3.20s/it]Arena.playGames (2): 100%|██████████| 5/5 [00:16<00:00,  3.20s/it]
-[32m2021-02-26 14:04:11[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m NEW/PREV WINS : 3 / 7 ; DRAWS : 0
-[32m2021-02-26 14:04:11[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m REJECTING NEW MODEL
-[32m2021-02-26 14:04:13[0m [35mtobias-System-Product-Name[0m [34mCoach[15584][0m [1;30mINFO[0m Starting Iter #4 ...
-Self Play:   0%|          | 0/10 [00:00<?, ?it/s]Self Play:  10%|█         | 1/10 [00:03<00:34,  3.79s/it]Self Play:  20%|██        | 2/10 [00:06<00:26,  3.35s/it]Self Play:  30%|███       | 3/10 [00:10<00:23,  3.34s/it]Self Play:  40%|████      | 4/10 [00:13<00:19,  3.23s/it]Self Play:  50%|█████     | 5/10 [00:16<00:15,  3.18s/it]Self Play:  50%|█████     | 5/10 [00:17<00:17,  3.45s/it]
-Traceback (most recent call last):
-  File "main.py", line 61, in <module>
-    main()
-  File "main.py", line 57, in main
-    c.learn()
-  File "/home/tobias/Documents/bachelor/NetworkTraining/Coach.py", line 104, in learn
-    iterationTrainExamples += self.executeEpisode()
-  File "/home/tobias/Documents/bachelor/NetworkTraining/Coach.py", line 61, in executeEpisode
-    pi = self.mcts.getActionProb(canonicalBoard, temp=temp)
-  File "/home/tobias/Documents/bachelor/NetworkTraining/MCTS.py", line 44, in getActionProb
-    self.search(canonicalBoard)
-  File "/home/tobias/Documents/bachelor/NetworkTraining/MCTS.py", line 133, in search
-    v = self.search(next_s)
-  File "/home/tobias/Documents/bachelor/NetworkTraining/MCTS.py", line 133, in search
-    v = self.search(next_s)
-  File "/home/tobias/Documents/bachelor/NetworkTraining/MCTS.py", line 133, in search
-    v = self.search(next_s)
-  File "/home/tobias/Documents/bachelor/NetworkTraining/MCTS.py", line 93, in search
-    self.Ps[s], v = self.nnet.predict(canonicalBoard)
-  File "/home/tobias/Documents/bachelor/NetworkTraining/othello/keras/NNet.py", line 59, in predict
-    pi, v = self.nnet.model.predict(board)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/keras/engine/training.py", line 908, in predict
-    use_multiprocessing=use_multiprocessing)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/keras/engine/training_arrays.py", line 723, in predict
-    callbacks=callbacks)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/keras/engine/training_arrays.py", line 271, in model_iteration
-    model.reset_metrics()
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/keras/engine/training.py", line 914, in reset_metrics
-    m.reset_states()
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/keras/metrics.py", line 210, in reset_states
-    K.batch_set_value([(v, 0) for v in self.variables])
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/keras/backend.py", line 3259, in batch_set_value
-    get_session().run(assign_ops, feed_dict=feed_dict)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/client/session.py", line 956, in run
-    run_metadata_ptr)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/client/session.py", line 1180, in _run
-    feed_dict_tensor, options, run_metadata)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/client/session.py", line 1359, in _do_run
-    run_metadata)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/client/session.py", line 1365, in _do_call
-    return fn(*args)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/client/session.py", line 1350, in _run_fn
-    target_list, run_metadata)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/client/session.py", line 1443, in _call_tf_sessionrun
-    run_metadata)
-KeyboardInterrupt

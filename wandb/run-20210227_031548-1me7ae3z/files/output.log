@@ -1,80 +1,0 @@
-[32m2021-02-27 03:15:50[0m [35mtobias-System-Product-Name[0m [34m__main__[2695][0m [1;30mINFO[0m Starting the learning process 🎉
-[32m2021-02-27 03:15:50[0m [35mtobias-System-Product-Name[0m [34mCoach[2695][0m [1;30mINFO[0m Starting Iter #1 ...
-Self Play:   0%|          | 0/80 [00:00<?, ?it/s]2021-02-27 03:15:50.733751: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
-2021-02-27 03:15:50.974795: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-27 03:15:50.976593: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
-name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.683
-pciBusID: 0000:01:00.0
-2021-02-27 03:15:50.999140: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
-2021-02-27 03:15:51.978143: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
-2021-02-27 03:15:52.685032: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
-2021-02-27 03:15:52.881884: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
-2021-02-27 03:15:53.213509: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
-2021-02-27 03:15:53.446835: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
-2021-02-27 03:15:54.080206: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
-2021-02-27 03:15:54.080560: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-27 03:15:54.082540: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-27 03:15:54.084230: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
-2021-02-27 03:15:54.089779: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
-2021-02-27 03:15:54.279878: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 4200000000 Hz
-2021-02-27 03:15:54.281320: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x56082f7c6f00 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
-2021-02-27 03:15:54.286135: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
-2021-02-27 03:15:54.295187: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-27 03:15:54.297484: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
-name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.683
-pciBusID: 0000:01:00.0
-2021-02-27 03:15:54.297659: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
-2021-02-27 03:15:54.297750: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
-2021-02-27 03:15:54.297840: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
-2021-02-27 03:15:54.297920: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
-2021-02-27 03:15:54.297997: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
-2021-02-27 03:15:54.298076: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
-2021-02-27 03:15:54.298156: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
-2021-02-27 03:15:54.298445: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-27 03:15:54.300951: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-27 03:15:54.303560: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0
-2021-02-27 03:15:54.315411: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
-2021-02-27 03:15:54.500876: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
-2021-02-27 03:15:54.500913: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 
-2021-02-27 03:15:54.500923: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N 
-2021-02-27 03:15:54.505079: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-27 03:15:54.506320: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-27 03:15:54.507486: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:983] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
-2021-02-27 03:15:54.508497: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 10190 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:01:00.0, compute capability: 6.1)
-2021-02-27 03:15:54.512843: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x560830f48a80 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
-2021-02-27 03:15:54.512880: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): GeForce GTX 1080 Ti, Compute Capability 6.1
-2021-02-27 03:16:08.687413: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
-2021-02-27 03:16:10.352922: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
-2021-02-27 03:16:15.830615: W tensorflow/stream_executor/cuda/redzone_allocator.cc:312] Not found: ./bin/ptxas not found
-Relying on driver to perform ptx compilation. This message will be only logged once.
-Self Play:   1%|▏         | 1/80 [00:28<37:37, 28.57s/it]Self Play:   2%|▎         | 2/80 [00:31<17:27, 13.43s/it]Self Play:   4%|▍         | 3/80 [00:34<10:56,  8.53s/it]Self Play:   5%|▌         | 4/80 [00:36<07:53,  6.23s/it]Self Play:   6%|▋         | 5/80 [00:39<06:13,  4.98s/it]Self Play:   8%|▊         | 6/80 [00:42<05:14,  4.26s/it]Self Play:   9%|▉         | 7/80 [00:45<04:34,  3.77s/it]Self Play:  10%|█         | 8/80 [00:47<04:08,  3.45s/it]Self Play:  11%|█▏        | 9/80 [00:50<03:49,  3.23s/it]Self Play:  12%|█▎        | 10/80 [00:53<03:36,  3.10s/it]Self Play:  14%|█▍        | 11/80 [00:56<03:26,  2.99s/it]Self Play:  15%|█▌        | 12/80 [00:59<03:18,  2.93s/it]Self Play:  16%|█▋        | 13/80 [01:01<03:14,  2.90s/it]Self Play:  18%|█▊        | 14/80 [01:04<03:10,  2.88s/it]Self Play:  19%|█▉        | 15/80 [01:07<03:08,  2.89s/it]Self Play:  20%|██        | 16/80 [01:10<03:03,  2.87s/it]Self Play:  21%|██▏       | 17/80 [01:13<02:59,  2.85s/it]Self Play:  22%|██▎       | 18/80 [01:16<02:54,  2.82s/it]Self Play:  24%|██▍       | 19/80 [01:18<02:51,  2.81s/it]Self Play:  25%|██▌       | 20/80 [01:21<02:47,  2.78s/it]Self Play:  26%|██▋       | 21/80 [01:24<02:45,  2.80s/it]Self Play:  28%|██▊       | 22/80 [01:27<02:42,  2.80s/it]Self Play:  29%|██▉       | 23/80 [01:29<02:40,  2.81s/it]Self Play:  30%|███       | 24/80 [01:32<02:38,  2.83s/it]Self Play:  31%|███▏      | 25/80 [01:35<02:35,  2.82s/it]Self Play:  32%|███▎      | 26/80 [01:38<02:32,  2.82s/it]Self Play:  34%|███▍      | 27/80 [01:41<02:29,  2.82s/it]Self Play:  35%|███▌      | 28/80 [01:44<02:27,  2.83s/it]Self Play:  36%|███▋      | 29/80 [01:46<02:23,  2.81s/it]Self Play:  38%|███▊      | 30/80 [01:49<02:19,  2.80s/it]Self Play:  39%|███▉      | 31/80 [01:52<02:15,  2.77s/it]Self Play:  40%|████      | 32/80 [01:55<02:14,  2.80s/it]Self Play:  41%|████▏     | 33/80 [01:58<02:12,  2.81s/it]Self Play:  42%|████▎     | 34/80 [02:00<02:09,  2.81s/it]Self Play:  44%|████▍     | 35/80 [02:03<02:06,  2.81s/it]Self Play:  45%|████▌     | 36/80 [02:06<02:04,  2.84s/it]Self Play:  46%|████▋     | 37/80 [02:09<02:01,  2.82s/it]Self Play:  48%|████▊     | 38/80 [02:12<01:58,  2.82s/it]Self Play:  49%|████▉     | 39/80 [02:15<01:56,  2.83s/it]Self Play:  50%|█████     | 40/80 [02:17<01:53,  2.83s/it]Self Play:  51%|█████▏    | 41/80 [02:20<01:48,  2.78s/it]Self Play:  52%|█████▎    | 42/80 [02:23<01:45,  2.78s/it]Self Play:  54%|█████▍    | 43/80 [02:26<01:42,  2.78s/it]Self Play:  55%|█████▌    | 44/80 [02:28<01:40,  2.80s/it]Self Play:  56%|█████▋    | 45/80 [02:31<01:38,  2.81s/it]Self Play:  57%|█████▊    | 46/80 [02:34<01:36,  2.83s/it]Self Play:  59%|█████▉    | 47/80 [02:37<01:33,  2.83s/it]Self Play:  60%|██████    | 48/80 [02:40<01:30,  2.82s/it]Self Play:  61%|██████▏   | 49/80 [02:43<01:26,  2.79s/it]Self Play:  62%|██████▎   | 50/80 [02:45<01:24,  2.81s/it]Self Play:  64%|██████▍   | 51/80 [02:48<01:21,  2.81s/it]Self Play:  65%|██████▌   | 52/80 [02:51<01:18,  2.79s/it]Self Play:  66%|██████▋   | 53/80 [02:54<01:15,  2.80s/it]Self Play:  68%|██████▊   | 54/80 [02:56<01:12,  2.78s/it]Self Play:  69%|██████▉   | 55/80 [02:59<01:09,  2.78s/it]Self Play:  70%|███████   | 56/80 [03:02<01:07,  2.81s/it]Self Play:  71%|███████▏  | 57/80 [03:05<01:04,  2.81s/it]Self Play:  72%|███████▎  | 58/80 [03:08<01:01,  2.81s/it]Self Play:  74%|███████▍  | 59/80 [03:11<00:59,  2.81s/it]Self Play:  75%|███████▌  | 60/80 [03:13<00:56,  2.80s/it]Self Play:  76%|███████▋  | 61/80 [03:16<00:53,  2.81s/it]Self Play:  76%|███████▋  | 61/80 [03:18<01:01,  3.25s/it]
-Traceback (most recent call last):
-  File "main.py", line 60, in <module>
-    main()
-  File "main.py", line 56, in main
-    c.learn()
-  File "/home/tobias/Documents/bachelor/NetworkTraining/Coach.py", line 104, in learn
-    iterationTrainExamples += self.executeEpisode()
-  File "/home/tobias/Documents/bachelor/NetworkTraining/Coach.py", line 61, in executeEpisode
-    pi = self.mcts.getActionProb(canonicalBoard, temp=temp)
-  File "/home/tobias/Documents/bachelor/NetworkTraining/MCTS.py", line 44, in getActionProb
-    self.search(canonicalBoard)
-  File "/home/tobias/Documents/bachelor/NetworkTraining/MCTS.py", line 133, in search
-    v = self.search(next_s)
-  File "/home/tobias/Documents/bachelor/NetworkTraining/MCTS.py", line 133, in search
-    v = self.search(next_s)
-  File "/home/tobias/Documents/bachelor/NetworkTraining/MCTS.py", line 93, in search
-    self.Ps[s], v = self.nnet.predict(canonicalBoard)
-  File "/home/tobias/Documents/bachelor/NetworkTraining/othello/keras/NNet.py", line 59, in predict
-    pi, v = self.nnet.model.predict(board)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/keras/engine/training.py", line 908, in predict
-    use_multiprocessing=use_multiprocessing)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/keras/engine/training_arrays.py", line 723, in predict
-    callbacks=callbacks)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/keras/engine/training_arrays.py", line 394, in model_iteration
-    batch_outs = f(ins_batch)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/keras/backend.py", line 3476, in __call__
-    run_metadata=self.run_metadata)
-  File "/home/tobias/anaconda3/envs/testenv/lib/python3.6/site-packages/tensorflow_core/python/client/session.py", line 1472, in __call__
-    run_metadata_ptr)
-KeyboardInterrupt
