@@ -2,6 +2,7 @@
 .DS_Store
 
 /temp/
+/wandb/
 /.project
 /.pydevproject
 
@@ -11,4 +12,4 @@ checkpoints/
 # For PyCharm users
 .idea/
 
-wandb/
+
