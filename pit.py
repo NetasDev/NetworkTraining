@@ -21,8 +21,12 @@ TK First an object of the game has to be created and atleast 2 Players of that g
 game = OthelloGame(8)
 hp = HumanOthelloPlayer(game)
 greed = GreedyOthelloPlayer(game)
-minimax = MinimaxOthelloPlayer(game,10,maxtime=3)
-minimax2 = MinimaxOthelloPlayer(game,10,maxtime=3)
+minimax = MinimaxOthelloPlayer(game,4)
+minimax.name = "valueMatrix"
+minimax2 = MinimaxOthelloPlayer(game,4,mode=1)
+minimax2.name = "baseMinimax"
+minimax3 = MinimaxOthelloPlayer(game,4,mode=2)
+minimax3.name = "betterFunction"
 """
 TK In Order to create a neural Network player with MCTS a NNetWrapper has to be created and this Wrapper has to load the net 
 from the target folder with the given filename

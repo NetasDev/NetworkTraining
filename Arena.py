@@ -2,6 +2,7 @@ import logging
 import pandas as pd
 import numpy as np
 import os
+import wandb
 
 from tqdm import tqdm
 from othello.OthelloInteractiveBoard import InteractiveBoard
@@ -169,6 +170,27 @@ class Arena():
 
         print(df)
         print(df2)
+
+        np.savetxt('wins',wins,delimiter = " ")
+        np.savetxt('draws',draws,delimiter=" ")
+
+    @staticmethod
+    def play_one_against_many(player,players,num_matches,game,det_turns,savefolder=False):
+        wins = np.zeros((len(players),1))
+        draws = np.zeros((len(players),1))
+
+        names = []
+        for i in range(len(players)):
+            names.append(players[i].name)
+            if savefolder!= False:
+                save = save = savefolder +"/"+ players[i].name
+            else:
+                save = False
+            arena = Arena(player,players[i],game,det_turns=det_turns)
+            wins[i],_,draws[i] = arena.playGames(num_matches,save=save)
+
+        df = pd.DataFrame(wins,colums=player.name,index=names)
+        df2 = pd.DataFrame(wins,colums=player.name,index=names)
 
         np.savetxt('wins',wins,delimiter = " ")
         np.savetxt('draws',draws,delimiter=" ")
