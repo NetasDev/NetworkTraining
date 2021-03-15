@@ -131,12 +131,10 @@ class Coach():
             self.pnet.load_checkpoint(folder=self.args.checkpoint, filename='temp')
             pmctsplayer = NeuralNetworkPlayer(self.game,self.pnet,self.args)
 
-            #pmcts = MCTS(self.game, self.pnet, self.args)
-
             loss,pi_loss,v_loss = self.nnet.train(trainExamples)
             nmctsplayer = NeuralNetworkPlayer(self.game,self.nnet,self.args)
-            
-            #nmcts = MCTS(self.game, self.nnet, self.args)
+
+
 
             # end of selfplay/start of validation
             start_time_validation = perf_counter()
@@ -161,7 +159,7 @@ class Coach():
             # end of Validation
             # wandb speicherung anfang
             end_time_validation = perf_counter()
-            time_this_iteration = perf_counter() - time_this_iteration
+            time_this_iteration = perf_counter() - start_time_selfplay
             all_time = perf_counter()-start_time
 
             selfplay_time_iteration = start_time_training - start_time_selfplay
@@ -177,6 +175,11 @@ class Coach():
             all_looses = all_looses + pwins
             all_draws = all_draws + draws
             all_games = all_games + pwins + nwins + draws
+
+            print("time this iteration:"+str(time_this_iteration))
+            print(selfplay_time_iteration*100/time_this_iteration)
+            print(training_time_iteration*100/time_this_iteration)
+            print(validation_time_iteration*100/time_this_iteration)
             
             wandb.log({"Wins":nwins,"Losses":pwins,"Draws":draws,"Win-Rate":nwins/games,"Overall Win-Rate":all_wins/all_games,
             "Overall Draw-Rate":all_draws/all_games,"Time":all_time,"Selfplay-Time Iteration":selfplay_time_iteration,
@@ -189,9 +192,9 @@ class Coach():
             "Validation-Time":all_time_validation,"Validation-Time %":all_time_validation*100/all_time,
             "Generation":generation,"loss":loss,"pi_loss":pi_loss,"v_loss":v_loss
             })
-
             #wandb speicherung ende
 
+            
     def getCheckpointFile(self, iteration):
         return 'checkpoint_' + str(iteration)
 
