@@ -14,26 +14,26 @@ coloredlogs.install(level='INFO')  # Change this to DEBUG to see more info.
 
 args = dotdict({
     'numIters': 1000,
-    'numEps': 40,               # Number of complete self-play games to simulate during a new iteration.
-    'tempThreshold': 15,        #
+    'numEps': 80,              # Number of complete self-play games to simulate during a new iteration.
+    'tempThreshold': 8,        #
     'updateThreshold': 0.6,     # During arena playoff, new neural net will be accepted if threshold or more of games are won.
-    'maxlenOfQueue': 200000,      # Number of game examples to train the neural networks.
-    'numMCTSSims': 50,          # Number of games moves for MCTS to simulate.
+    'maxlenOfQueue': 200000,    # Number of game examples to train the neural networks.
+    'numMCTSSims': 25,          # Number of games moves for MCTS to simulate.
     'arenaCompare': 20,         # Number of games to play during arena play to determine if new net will be accepted.
     'cpuct': 1,
 
-    'checkpoint': './temp/Othello8x8/EPStest/40/',
+    'checkpoint': './temp/Othello6x6/FirstModel/',
     'load_model': False,
-    'load_folder_file': ('/dev/models/8x100x50','best'),
-    'numItersForTrainExamplesHistory': 20,
-    'maxtime': 14400,
+    'load_folder_file': ('./temp/Othello8x8/FirstModel_continued/','best'),
+    'numItersForTrainExamplesHistory': 10,
+    'maxtime': 57600,
 
-    'wandb_project':'Othello8/EPStest'
+    'wandb_project':'Othello6x6'
 })
 
 def main():
     log.info('Loading %s...', Game.__name__)
-    g = Game(8)
+    g = Game(6)
 
     log.info('Loading %s...', nn.__name__)
     nnet = nn(g)
@@ -51,23 +51,21 @@ def main():
         log.info("Loading 'trainExamples' from file...")
         c.loadTrainExamples()
 
-    wandb.init(project=args.wandb_project,config=args,reinit=True)
+    run = wandb.init(project=args.wandb_project,config=args,reinit=True)
 
     log.info('Starting the learning process 🎉')
     c.learn()
     run.finish()
 
 
-main()
-args.checkpoint = './temp/Othello8x8/EPStest/80/'
-args.numEps = 80
-main()
-args.checkpoint = './temp/Othello8x8/EPStest/160/'
-args.numEps = 160
+
 main()
 
-
-
+"""
+args.checkpoint = './temp/Othello6x6/EPStest/40/'
+args.numEps = 40
+main()
+"""
 
 """
 if __name__ == "__main__":

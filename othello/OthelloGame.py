@@ -123,7 +123,6 @@ class OthelloGame(Game):
             return 0
     """
     
-    def 
 
 
     @staticmethod
