@@ -122,8 +122,39 @@ class OthelloGame(Game):
         else:
             return 0
     """
-    
-    def 
+    def get_only_pieces_of_player(self,board,player):
+        new_board = board.copy()
+        if player <0:
+            new_board[new_board>0]=0
+        else:
+            new_board[new_board<0]=0
+        return new_board
+
+    def get_coin_parity(self,board,maxplayer):
+        maxscore = np.sum(self.get_only_pieces_of_player(board,maxplayer))
+        minscore = -1*np.sum(self.get_only_pieces_of_player(board,maxplayer*-1))
+        return 100*(maxscore-minscore)/(maxscore+minscore)
+
+    def get_mobility_score(self,board,maxplayer):
+        maxpmv = len(self.getValidMoves(board,maxplayer))
+        minpmv = len(self.getValidMoves(board,maxplayer*-1))
+
+        if (maxpmv+minpmv)!=0:
+            return 100*(maxpmv-minpmv)/(maxpmv+minpmv)
+        else:
+            return 0
+
+    def get_static_weight_score(self,board,maxplayer):
+        if self.n == 8:
+            weights = np.array(([ 4,-3, 2, 2, 2, 2,-3, 4],
+                                [-3,-4,-1,-1,-1,-1,-4,-3],
+                                [ 2,-1, 1, 0, 0, 1, -1,2],
+                                [ 2,-1, 0, 1, 1, 0,-1, 2],
+                                [ 2,-1, 0, 1, 1, 0,-1, 2],
+                                [ 2,-1, 1, 0, 0, 1,-1, 2],
+                                [-3,-4,-1,-1,-1,-1,-4,-3],  
+                                [ 4,-3, 2, 2, 2, 2,-3, 4]))
+            return np.sum(weights*self.get_only_pieces_of_player(board,maxplayer)) + np.sum(weights*self.get_only_pieces_of_player(board,-maxplayer))
 
 
     @staticmethod

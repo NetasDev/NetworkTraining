@@ -2,12 +2,6 @@ import numpy as np
 import math
 from time import perf_counter
 from .OthelloGame import OthelloGame
-"""
-import os,sys,inspect
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0,parentdir) 
-"""
 from MCTS import MCTS
 
 
@@ -78,13 +72,14 @@ class GreedyOthelloPlayer():
         return candidates[random_best_indice][1]
 
 class MinimaxOthelloPlayer():
-    def __init__(self,game,depth,maxtime=0):
+    def __init__(self,game,depth,mode=1,maxtime=0):
         self.maxtime = maxtime
         self.game = game
         self.depth = depth
         self.alpha = -math.inf
         self.beta = math.inf
         self.name = "Minimax"
+        self.mode = mode
 
     def play(self,board,deterministic=True):
         valids = self.game.getValidMoves(board, 1)
@@ -136,7 +131,11 @@ class MinimaxOthelloPlayer():
         gameEnd = self.game.getGameEnded(board,player)
         if depth == 0 or gameEnd!=0:
             if depth == 0:
-                return self.game.getScore(board,1)
+                if self.mode==1:
+                    return self.game.getScore(board,1)
+                if self.mode==2:
+                    return self.game.get_mobility_score(board,1)+self.game.get_coin_parity(board,1)
+                return self.game.get_static_weight_score(board,1)
             if gameEnd == 1:
                 return math.inf
             if gameEnd == -1:
@@ -147,7 +146,7 @@ class MinimaxOthelloPlayer():
                 if valids[a]==0:
                     continue
                 nextBoard, _ = self.game.getNextState(board,1,a)
-                score = max(score,self.minimax(nextBoard,-player,depth-1,alpha,beta,endtime))
+                score = max(score,self.minimax(nextBoard,-player,depth-1,alpha,beta,endtime=endtime))
                 alpha = max(alpha,score)
                 if alpha >= beta:
                     break
@@ -158,7 +157,7 @@ class MinimaxOthelloPlayer():
                 if valids[a]==0:
                     continue
                 nextBoard, _ = self.game.getNextState(board,-1,a)
-                score = min(score,self.minimax(nextBoard,-player,depth-1,alpha,beta,endtime))
+                score = min(score,self.minimax(nextBoard,-player,depth-1,alpha,beta,endtime=endtime))
                 beta = min(beta,score)
                 if beta <= alpha:
                     break
