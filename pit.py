@@ -18,7 +18,7 @@ TK This script is set up to easily use the functions provided by the Project
 """
 TK First an object of the game has to be created and atleast 2 Players of that game in order to play the game.
 """
-game = OthelloGame(8)
+game = OthelloGame(6)
 hp = HumanOthelloPlayer(game)
 greed = GreedyOthelloPlayer(game)
 minimax = MinimaxOthelloPlayer(game,4)
@@ -74,6 +74,7 @@ TK There is also the Option to play a tournament between two or more players
 If a save path is set for the tournament,there will be new folders created with the names of the two players
 matched against each other and the games will be saved in there.
 """
+"""
 network = nn(game)
 network.load_checkpoint(folder="./temp/Othello8x8/EPStest/40/",filename="best")
 args = dotdict({'numMCTSSims': 50, 'cpuct': 1.0})
@@ -98,6 +99,8 @@ print(network1wins)
 print(network2wins)
 print(draws)
 """
+
+"""
 players = []
 players.append(neuralplayer)
 players.append(neuralplayer2)
@@ -106,4 +109,34 @@ Arena.Arena.play_tournament(players,40,game,2,savefolder="./newFolder/tournament
 """
 
 
+"""
+folder = "./temp/Othello6x6/FirstModel/"
+network = nn(game)
+network.load_checkpoint(folder=folder,filename="best")
+args = dotdict({'numMCTSSims': 50, 'cpuct': 1.0})
+neuralplayer = NeuralNetworkPlayer(game,network,args)
+neuralplayer.name = "16h_player"
 
+
+Arena.Arena.play_one_against_many(neuralplayer,folder,200,game,8,savefolder="./one_many_2/")
+"""
+
+
+network = nn(game)
+folder = "./temp/Othello6x6/FirstModel/"
+network.load_checkpoint(folder=folder,filename="best")
+args = dotdict({'numMCTSSims': 50, 'cpuct': 1.0})
+bestplayer = NeuralNetworkPlayer(game,network,args,name="best player")
+
+network2=nn(game)
+network2.load_checkpoint(folder=folder,filename="checkpoint_51")
+worstplayer = NeuralNetworkPlayer(game,network2,args,name="worst player")
+
+arena = Arena.Arena(bestplayer,worstplayer,game,det_turns=8)
+print(arena.playGames(20,save = "./newTry/"))
+
+
+"""
+Inboard = InteractiveBoard.load("./newTry/game6")
+Inboard.show_replay()
+"""

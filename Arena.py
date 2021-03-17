@@ -6,6 +6,12 @@ import wandb
 
 from tqdm import tqdm
 from othello.OthelloInteractiveBoard import InteractiveBoard
+from othello.keras.NNet import NNetWrapper as nn
+from othello.OthelloInteractiveBoard import InteractiveBoard
+from othello.OthelloLogic import Board
+from othello.OthelloPlayers import *
+
+from utils import *
 
 log = logging.getLogger(__name__)
 
@@ -15,7 +21,7 @@ class Arena():
     An Arena class where any 2 agents can be pit against each other.
     """
 
-    def __init__(self, player1, player2, game, det_turns,display=None):
+    def __init__(self, player1, player2, game, det_turns=0,display=None):
         """
         Input:
             player 1,2: two functions that takes board as input, return action
@@ -31,7 +37,7 @@ class Arena():
         self.player2 = player2
         self.game = game
         self.display = display
-        self.det_turns = 0
+        self.det_turns = det_turns
 
     def playGame(self, verbose=False,save=False):
         """
@@ -175,22 +181,44 @@ class Arena():
         np.savetxt('draws',draws,delimiter=" ")
 
     @staticmethod
-    def play_one_against_many(player,players,num_matches,game,det_turns,savefolder=False):
-        wins = np.zeros((len(players),1))
-        draws = np.zeros((len(players),1))
-
+    def play_one_against_many(player,folder,num_matches,game,det_turns,savefolder=False):
+        #
+        wandb.init(project="6x6 previous iterations")
+        wins=[]
+        losses=[]
+        draws=[]
         names = []
-        for i in range(len(players)):
-            names.append(players[i].name)
-            if savefolder!= False:
-                save = save = savefolder +"/"+ players[i].name
-            else:
-                save = False
-            arena = Arena(player,players[i],game,det_turns=det_turns)
-            wins[i],_,draws[i] = arena.playGames(num_matches,save=save)
+        i = 0
+        generation =0
+        while i <=70:
+            print(folder+"checkpoint_"+str(i))
+            if os.path.isfile(folder+"checkpoint_"+str(i)):
+                print("loading generation "+str(generation))
+                network = nn(game)
+                network.load_checkpoint(folder= folder,filename="checkpoint_"+str(i))
+                args = dotdict({'numMCTSSims':player.args.numMCTSSims,'cpuct':player.args.cpuct})
+                neuralplayer = NeuralNetworkPlayer(game,network,args)
+                neuralplayer.name = "Neural Network Generation "+str(generation)
+                names.append(neuralplayer.name)
+                if savefolder!= False:
+                    save = savefolder +"/"+ neuralplayer.name+"/"
+                else:
+                    save = False
+                arena = Arena(player,neuralplayer,game,det_turns=det_turns)
+                winsG,lossesG,drawsG = arena.playGames(num_matches,save=save)
+                wins.append(winsG)
+                losses.append(lossesG)
+                draws.append(drawsG)
+                wandb.log({'Wins':winsG,'Losses':lossesG,'Draws':drawsG,
+                'Winrate':winsG/(winsG+drawsG+lossesG)})
+                generation = generation+1
+            i = i+1
 
-        df = pd.DataFrame(wins,colums=player.name,index=names)
-        df2 = pd.DataFrame(wins,colums=player.name,index=names)
+        df = pd.DataFrame(wins,columns=player.name,index=names)
+        df2 = pd.DataFrame(wins,columns=player.name,index=names)
+
+        print(df)
+        print(df2)
 
         np.savetxt('wins',wins,delimiter = " ")
         np.savetxt('draws',draws,delimiter=" ")
