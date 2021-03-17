@@ -31,7 +31,7 @@ class Arena():
         self.player2 = player2
         self.game = game
         self.display = display
-        self.det_turns = 0
+        self.det_turns = 3
 
     def playGame(self, verbose=False,save=False):
         """
@@ -56,13 +56,7 @@ class Arena():
         it = 0
         while self.game.getGameEnded(board, curPlayer) == 0:
             it += 1
-            """
-            if verbose:
-                assert self.display
-                print("Turn ", str(it), "Player ", str(curPlayer))
-                self.display(board)
-            """
-            action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it>=3)
+            action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it>self.det_turns)
 
             valids = self.game.getValidMoves(self.game.getCanonicalForm(board, curPlayer), 1)
 

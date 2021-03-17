@@ -10,5 +10,7 @@ checkpoints/
 
 # For PyCharm users
 .idea/
+test.py
+test2.py
 
 wandb/

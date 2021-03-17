@@ -142,7 +142,7 @@ class Coach():
             start_time_validation = perf_counter()
             log.info('PITTING AGAINST PREVIOUS VERSION')
 
-            arena = Arena(pmctsplayer,nmctsplayer,self.game,2)
+            arena = Arena(pmctsplayer,nmctsplayer,self.game,self.args.tempThreshold)
             pwins, nwins, draws = arena.playGames(self.args.arenaCompare)
             print(pwins)
             print(nwins)

@@ -174,8 +174,8 @@ class NeuralNetworkPlayer():
         self.mcts = self.mctsStart
 
 
-    def play(self,board,deterministic=True):
-        if deterministic:
+    def play(self,board,deterministic=False):
+        if deterministic == False:
             return np.argmax(self.mcts.getActionProb(board, temp=0))
 
         prob = self.mcts.getActionProb(board,temp=1)
