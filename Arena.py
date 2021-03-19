@@ -76,7 +76,7 @@ class Arena():
             if save != False:
                 InBoard.board_history.append(board)
                 InBoard.move_history.append((curPlayer*-1,self.game.action_to_move(action)))
-                
+
         if save != False:
             i = 1
             while os.path.isfile(save+"game"+str(i)+".pkl"):

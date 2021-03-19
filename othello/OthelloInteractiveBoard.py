@@ -10,6 +10,9 @@ class InteractiveBoard():
         self.player2 = player2
         self.player1_name = self.player1.name
         self.player2_name = self.player2.name
+        self.args_player1 = None
+        self.args_player2 = None
+        
         self.game = game
         self.player_to_move = 1
         self.size = self.game.n
