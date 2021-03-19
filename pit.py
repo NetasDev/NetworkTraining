@@ -123,17 +123,18 @@ Arena.Arena.play_one_against_many(neuralplayer,folder,200,game,8,savefolder="./o
 
 
 network = nn(game)
-folder = "./temp/Othello6x6/FirstModel/"
+folder = "./temp/Othello6x6/SecondModel/"
 network.load_checkpoint(folder=folder,filename="best")
 args = dotdict({'numMCTSSims': 50, 'cpuct': 1.0})
 bestplayer = NeuralNetworkPlayer(game,network,args,name="best player")
 
+folder = "./temp/Othello6x6/TryoutModel/"
 network2=nn(game)
-network2.load_checkpoint(folder=folder,filename="checkpoint_51")
+network2.load_checkpoint(folder=folder,filename="best")
 worstplayer = NeuralNetworkPlayer(game,network2,args,name="worst player")
 
-arena = Arena.Arena(bestplayer,worstplayer,game,det_turns=8)
-print(arena.playGames(20,save = "./newTry/"))
+arena = Arena.Arena(bestplayer,worstplayer,game,tempThreshold=8)
+print(arena.playGames(600,save = "./newTry/"))
 
 
 """

@@ -54,6 +54,7 @@ class Coach():
         episodeStep = 0
 
         while True:
+            self.mcts = MCTS(self.game, self.nnet, self.args)  # reset search tree
             episodeStep += 1
             canonicalBoard = self.game.getCanonicalForm(board, self.curPlayer)
             temp = int(episodeStep < self.args.tempThreshold)
@@ -81,14 +82,7 @@ class Coach():
         """
         start_time = perf_counter()
         time_this_iteration = start_time
-        all_time_selfplay = 0
-        all_time_training = 0
-        all_time_validation = 0
-        all_wins = 0
-        all_looses = 0
-        all_draws = 0
-        all_games = 0
-        generation = 0
+        all_time_selfplay,all_time_training,all_time_validation,all_wins,all_looses,all_draws,all_games,generation  = 0,0,0,0,0,0,0,0
 
         for i in range(1, self.args.numIters + 1):
             start_time_selfplay = perf_counter()
@@ -97,10 +91,9 @@ class Coach():
             log.info(f'Starting Iter #{i} ...')
             # examples of the iteration
             if not self.skipFirstSelfPlay or i > 1:
-                iterationTrainExamples = deque([], maxlen=self.args.maxlenOfQueue)
+                iterationTrainExamples = []
 
                 for _ in tqdm(range(self.args.numEps), desc="Self Play"):
-                    self.mcts = MCTS(self.game, self.nnet, self.args)  # reset search tree
                     iterationTrainExamples += self.executeEpisode()
 
                 # save the iteration examples to the history 
@@ -140,7 +133,7 @@ class Coach():
             start_time_validation = perf_counter()
             log.info('PITTING AGAINST PREVIOUS VERSION')
 
-            arena = Arena(pmctsplayer,nmctsplayer,self.game,2)
+            arena = Arena(pmctsplayer,nmctsplayer,self.game,self.args.tempThreshold)
             pwins, nwins, draws = arena.playGames(self.args.arenaCompare)
             print(pwins)
             print(nwins)

@@ -169,6 +169,7 @@ class NeuralNetworkPlayer():
     def __init__(self,game,nnet,args,name="NeuralPlayer"):
         self.game = game
         self.args = args
+        self.nnet = nnet
         self.mctsStart = MCTS(game,nnet,args)
         self.mcts = MCTS(game,nnet,args)
         self.name = name
@@ -177,13 +178,12 @@ class NeuralNetworkPlayer():
         self.mcts = self.mctsStart
 
 
-    def play(self,board,deterministic=True):
-        if deterministic:
-            
+    def play(self,board,tempThreshold_over=True,details = False):
+        if tempThreshold_over:
             return np.argmax(self.mcts.getActionProb(board, temp=0))
-
         prob = self.mcts.getActionProb(board,temp=1)
         choice = np.random.choice(range(len(prob)),p=prob)
+
         return choice
         
 

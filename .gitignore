@@ -5,11 +5,13 @@
 /wandb/
 /.project
 /.pydevproject
-
+/trained_models/
 # checkpoint
 checkpoints/
 
 # For PyCharm users
 .idea/
+test.py
+test2.py
 
 

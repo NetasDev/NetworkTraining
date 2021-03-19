@@ -74,10 +74,10 @@ class InteractiveBoard():
                 y = self.square_size*(j + 0.5)
                 if self.board[i][j]==1:
                     pygame.draw.circle(screen,(0,0,0),(x,y),self.square_size/2-self.space/1.1)
-                    pygame.draw.circle(screen,(255,255,255),(x,y),self.square_size/2-self.space)
+                    pygame.draw.circle(screen,(0,0,0),(x,y),self.square_size/2-self.space)
                 if self.board[i][j]==-1:
                     pygame.draw.circle(screen,(0,0,0),(x,y),self.square_size/2-self.space/1.1)
-                    pygame.draw.circle(screen,(0,0,0),(x,y),self.square_size/2-self.space)
+                    pygame.draw.circle(screen,(255,255,255),(x,y),self.square_size/2-self.space)
         if self.game.getGameEnded(self.board,self.player_to_move) == 0:
             moves = self.game.getValidMoves(self.board, self.player_to_move)
             for n in range(len(moves)):

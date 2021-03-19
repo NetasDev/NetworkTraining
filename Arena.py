@@ -21,7 +21,7 @@ class Arena():
     An Arena class where any 2 agents can be pit against each other.
     """
 
-    def __init__(self, player1, player2, game, det_turns=0,display=None):
+    def __init__(self, player1, player2, game, tempThreshold=3,display=None):
         """
         Input:
             player 1,2: two functions that takes board as input, return action
@@ -37,7 +37,7 @@ class Arena():
         self.player2 = player2
         self.game = game
         self.display = display
-        self.det_turns = det_turns
+        self.tempThreshold = tempThreshold
 
     def playGame(self, verbose=False,save=False):
         """
@@ -49,8 +49,7 @@ class Arena():
             or
                 draw result returned from the game that is neither 1, -1, nor 0.
         """
-        self.player1.reset()
-        self.player2.reset()
+        
 
         if save!= False:
             InBoard = InteractiveBoard(self.game,self.player1,self.player2)
@@ -61,14 +60,10 @@ class Arena():
         board = self.game.getInitBoard()
         it = 0
         while self.game.getGameEnded(board, curPlayer) == 0:
+            self.player1.reset()
+            self.player2.reset()
             it += 1
-            """
-            if verbose:
-                assert self.display
-                print("Turn ", str(it), "Player ", str(curPlayer))
-                self.display(board)
-            """
-            action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it>=3)
+            action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it>=self.tempThreshold)
 
             valids = self.game.getValidMoves(self.game.getCanonicalForm(board, curPlayer), 1)
 
@@ -81,12 +76,7 @@ class Arena():
             if save != False:
                 InBoard.board_history.append(board)
                 InBoard.move_history.append((curPlayer*-1,self.game.action_to_move(action)))
-        """
-        if verbose:
-            assert self.display
-            print("Game over: Turn ", str(it), "Result ", str(self.game.getGameEnded(board, 1)))
-            self.display(board)
-        """
+                
         if save != False:
             i = 1
             while os.path.isfile(save+"game"+str(i)+".pkl"):
@@ -151,7 +141,7 @@ class Arena():
         return oneWon, twoWon, draws
 
     @staticmethod
-    def play_tournament(players,num_matches,game,det_turns,savefolder=False):
+    def play_tournament(players,num_matches,game,tempThreshold,savefolder=False):
         wins = np.zeros((len(players),len(players)),dtype=int)
         draws = np.zeros((len(players),len(players)),dtype=int)
         names = []
@@ -164,7 +154,7 @@ class Arena():
                         save = savefolder +"/"+ players[i].name +"VS" +players[j].name+"/"
                     else:
                         save = False
-                    arena = Arena(players[i],players[j],game,det_turns=det_turns)
+                    arena = Arena(players[i],players[j],game,tempThreshold=tempThreshold)
                     wins[i][j],_,draws[i][j] = arena.playGames(num_matches,save=save)
 
         print(names)
@@ -181,7 +171,7 @@ class Arena():
         np.savetxt('draws',draws,delimiter=" ")
 
     @staticmethod
-    def play_one_against_many(player,folder,num_matches,game,det_turns,savefolder=False):
+    def play_one_against_many(player,folder,num_matches,game,tempThreshold,savefolder=False):
         #
         wandb.init(project="6x6 previous iterations")
         wins=[]
@@ -204,7 +194,7 @@ class Arena():
                     save = savefolder +"/"+ neuralplayer.name+"/"
                 else:
                     save = False
-                arena = Arena(player,neuralplayer,game,det_turns=det_turns)
+                arena = Arena(player,neuralplayer,game,tempThreshold=tempThreshold)
                 winsG,lossesG,drawsG = arena.playGames(num_matches,save=save)
                 wins.append(winsG)
                 losses.append(lossesG)
