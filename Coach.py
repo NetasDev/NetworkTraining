@@ -116,7 +116,7 @@ class Coach():
             #end of selfplay/start of training network
             start_time_training = perf_counter()
             # training new network, keeping a copy of the old one
-            print(perf_counter()-start_time)
+            
             if perf_counter() - start_time >self.args.maxtime:
                 print(perf_counter()-start_time)
                 break
@@ -135,9 +135,7 @@ class Coach():
 
             arena = Arena(pmctsplayer,nmctsplayer,self.game,self.args.tempThreshold)
             pwins, nwins, draws = arena.playGames(self.args.arenaCompare)
-            print(pwins)
-            print(nwins)
-            print(draws)
+
 
             log.info('NEW/PREV WINS : %d / %d ; DRAWS : %d' % (nwins, pwins, draws))
             if pwins + nwins == 0 or float(nwins) / (pwins + nwins) < self.args.updateThreshold:
@@ -168,11 +166,6 @@ class Coach():
             all_looses = all_looses + pwins
             all_draws = all_draws + draws
             all_games = all_games + pwins + nwins + draws
-
-            print("time this iteration:"+str(time_this_iteration))
-            print(selfplay_time_iteration*100/time_this_iteration)
-            print(training_time_iteration*100/time_this_iteration)
-            print(validation_time_iteration*100/time_this_iteration)
             
             wandb.log({"Wins":nwins,"Losses":pwins,"Draws":draws,"Win-Rate":nwins/games,"Overall Win-Rate":all_wins/all_games,
             "Overall Draw-Rate":all_draws/all_games,"Time":all_time,"Selfplay-Time Iteration":selfplay_time_iteration,
