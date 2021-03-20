@@ -6,6 +6,12 @@ import wandb
 
 from tqdm import tqdm
 from othello.OthelloInteractiveBoard import InteractiveBoard
+from othello.keras.NNet import NNetWrapper as nn
+from othello.OthelloInteractiveBoard import InteractiveBoard
+from othello.OthelloLogic import Board
+from othello.OthelloPlayers import *
+
+from utils import *
 
 log = logging.getLogger(__name__)
 
@@ -15,7 +21,7 @@ class Arena():
     An Arena class where any 2 agents can be pit against each other.
     """
 
-    def __init__(self, player1, player2, game, det_turns,display=None):
+    def __init__(self, player1, player2, game, tempThreshold=3,display=None):
         """
         Input:
             player 1,2: two functions that takes board as input, return action
@@ -31,7 +37,7 @@ class Arena():
         self.player2 = player2
         self.game = game
         self.display = display
-        self.det_turns = 3
+        self.tempThreshold = tempThreshold
 
     def playGame(self, verbose=False,save=False):
         """
@@ -43,8 +49,7 @@ class Arena():
             or
                 draw result returned from the game that is neither 1, -1, nor 0.
         """
-        self.player1.reset()
-        self.player2.reset()
+        
 
         if save!= False:
             InBoard = InteractiveBoard(self.game,self.player1,self.player2)
@@ -55,8 +60,10 @@ class Arena():
         board = self.game.getInitBoard()
         it = 0
         while self.game.getGameEnded(board, curPlayer) == 0:
+            self.player1.reset()
+            self.player2.reset()
             it += 1
-            action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it<self.det_turns)
+            action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it>=self.tempThreshold)
 
             valids = self.game.getValidMoves(self.game.getCanonicalForm(board, curPlayer), 1)
 
@@ -69,12 +76,7 @@ class Arena():
             if save != False:
                 InBoard.board_history.append(board)
                 InBoard.move_history.append((curPlayer*-1,self.game.action_to_move(action)))
-        """
-        if verbose:
-            assert self.display
-            print("Game over: Turn ", str(it), "Result ", str(self.game.getGameEnded(board, 1)))
-            self.display(board)
-        """
+
         if save != False:
             i = 1
             while os.path.isfile(save+"game"+str(i)+".pkl"):
@@ -139,7 +141,7 @@ class Arena():
         return oneWon, twoWon, draws
 
     @staticmethod
-    def play_tournament(players,num_matches,game,det_turns,savefolder=False):
+    def play_tournament(players,num_matches,game,tempThreshold,savefolder=False):
         wins = np.zeros((len(players),len(players)),dtype=int)
         draws = np.zeros((len(players),len(players)),dtype=int)
         names = []
@@ -152,7 +154,7 @@ class Arena():
                         save = savefolder +"/"+ players[i].name +"VS" +players[j].name+"/"
                     else:
                         save = False
-                    arena = Arena(players[i],players[j],game,det_turns=det_turns)
+                    arena = Arena(players[i],players[j],game,tempThreshold=tempThreshold)
                     wins[i][j],_,draws[i][j] = arena.playGames(num_matches,save=save)
 
         print(names)
@@ -169,22 +171,44 @@ class Arena():
         np.savetxt('draws',draws,delimiter=" ")
 
     @staticmethod
-    def play_one_against_many(player,players,num_matches,game,det_turns,savefolder=False):
-        wins = np.zeros((len(players),1))
-        draws = np.zeros((len(players),1))
-
+    def play_one_against_many(player,folder,num_matches,game,tempThreshold,savefolder=False):
+        #
+        wandb.init(project="6x6 previous iterations")
+        wins=[]
+        losses=[]
+        draws=[]
         names = []
-        for i in range(len(players)):
-            names.append(players[i].name)
-            if savefolder!= False:
-                save = save = savefolder +"/"+ players[i].name
-            else:
-                save = False
-            arena = Arena(player,players[i],game,det_turns=det_turns)
-            wins[i],_,draws[i] = arena.playGames(num_matches,save=save)
+        i = 0
+        generation =0
+        while i <=70:
+            print(folder+"checkpoint_"+str(i))
+            if os.path.isfile(folder+"checkpoint_"+str(i)):
+                print("loading generation "+str(generation))
+                network = nn(game)
+                network.load_checkpoint(folder= folder,filename="checkpoint_"+str(i))
+                args = dotdict({'numMCTSSims':player.args.numMCTSSims,'cpuct':player.args.cpuct})
+                neuralplayer = NeuralNetworkPlayer(game,network,args)
+                neuralplayer.name = "Neural Network Generation "+str(generation)
+                names.append(neuralplayer.name)
+                if savefolder!= False:
+                    save = savefolder +"/"+ neuralplayer.name+"/"
+                else:
+                    save = False
+                arena = Arena(player,neuralplayer,game,tempThreshold=tempThreshold)
+                winsG,lossesG,drawsG = arena.playGames(num_matches,save=save)
+                wins.append(winsG)
+                losses.append(lossesG)
+                draws.append(drawsG)
+                wandb.log({'Wins':winsG,'Losses':lossesG,'Draws':drawsG,
+                'Winrate':winsG/(winsG+drawsG+lossesG)})
+                generation = generation+1
+            i = i+1
 
-        df = pd.DataFrame(wins,colums=player.name,index=names)
-        df2 = pd.DataFrame(wins,colums=player.name,index=names)
+        df = pd.DataFrame(wins,columns=player.name,index=names)
+        df2 = pd.DataFrame(wins,columns=player.name,index=names)
+
+        print(df)
+        print(df2)
 
         np.savetxt('wins',wins,delimiter = " ")
         np.savetxt('draws',draws,delimiter=" ")

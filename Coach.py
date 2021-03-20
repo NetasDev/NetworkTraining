@@ -54,6 +54,7 @@ class Coach():
         episodeStep = 0
 
         while True:
+            self.mcts = MCTS(self.game, self.nnet, self.args)  # reset search tree
             episodeStep += 1
             canonicalBoard = self.game.getCanonicalForm(board, self.curPlayer)
             temp = int(episodeStep < self.args.tempThreshold)
@@ -86,14 +87,7 @@ class Coach():
         """
         start_time = perf_counter()
         time_this_iteration = start_time
-        all_time_selfplay = 0
-        all_time_training = 0
-        all_time_validation = 0
-        all_wins = 0
-        all_looses = 0
-        all_draws = 0
-        all_games = 0
-        generation = 0
+        all_time_selfplay,all_time_training,all_time_validation,all_wins,all_looses,all_draws,all_games,generation  = 0,0,0,0,0,0,0,0
 
         for i in range(1, self.args.numIters + 1):
             start_time_selfplay = perf_counter()
@@ -102,10 +96,9 @@ class Coach():
             log.info(f'Starting Iter #{i} ...')
             # examples of the iteration
             if not self.skipFirstSelfPlay or i > 1:
-                iterationTrainExamples = deque([], maxlen=self.args.maxlenOfQueue)
+                iterationTrainExamples = []
 
                 for _ in tqdm(range(self.args.numEps), desc="Self Play"):
-                    self.mcts = MCTS(self.game, self.nnet, self.args)  # reset search tree
                     iterationTrainExamples += self.executeEpisode()
 
                 # save the iteration examples to the history 
@@ -128,7 +121,7 @@ class Coach():
             #end of selfplay/start of training network
             start_time_training = perf_counter()
             # training new network, keeping a copy of the old one
-            print(perf_counter()-start_time)
+            
             if perf_counter() - start_time >self.args.maxtime:
                 print(perf_counter()-start_time)
                 break
@@ -136,12 +129,10 @@ class Coach():
             self.pnet.load_checkpoint(folder=self.args.checkpoint, filename='temp')
             pmctsplayer = NeuralNetworkPlayer(self.game,self.pnet,self.args)
 
-            #pmcts = MCTS(self.game, self.pnet, self.args)
-
             loss,pi_loss,v_loss = self.nnet.train(trainExamples)
             nmctsplayer = NeuralNetworkPlayer(self.game,self.nnet,self.args)
-            
-            #nmcts = MCTS(self.game, self.nnet, self.args)
+
+
 
             # end of selfplay/start of validation
             start_time_validation = perf_counter()
@@ -149,9 +140,7 @@ class Coach():
 
             arena = Arena(pmctsplayer,nmctsplayer,self.game,self.args.tempThreshold)
             pwins, nwins, draws = arena.playGames(self.args.arenaCompare)
-            print(pwins)
-            print(nwins)
-            print(draws)
+
 
             log.info('NEW/PREV WINS : %d / %d ; DRAWS : %d' % (nwins, pwins, draws))
             if pwins + nwins == 0 or float(nwins) / (pwins + nwins) < self.args.updateThreshold:
@@ -166,7 +155,7 @@ class Coach():
             # end of Validation
             # wandb speicherung anfang
             end_time_validation = perf_counter()
-            time_this_iteration = perf_counter() - time_this_iteration
+            time_this_iteration = perf_counter() - start_time_selfplay
             all_time = perf_counter()-start_time
 
             selfplay_time_iteration = start_time_training - start_time_selfplay
@@ -194,9 +183,9 @@ class Coach():
             "Validation-Time":all_time_validation,"Validation-Time %":all_time_validation*100/all_time,
             "Generation":generation,"loss":loss,"pi_loss":pi_loss,"v_loss":v_loss
             })
-
             #wandb speicherung ende
 
+            
     def getCheckpointFile(self, iteration):
         return 'checkpoint_' + str(iteration)
 

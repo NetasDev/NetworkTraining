@@ -2,9 +2,10 @@
 .DS_Store
 
 /temp/
+/wandb/
 /.project
 /.pydevproject
-
+/trained_models/
 # checkpoint
 checkpoints/
 
@@ -13,4 +14,3 @@ checkpoints/
 test.py
 test2.py
 
-wandb/

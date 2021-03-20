@@ -81,7 +81,7 @@ class MinimaxOthelloPlayer():
         self.name = "Minimax"
         self.mode = mode
 
-    def play(self,board,deterministic=True):
+    def play(self,board,deterministic=True,return_depth = False):
         valids = self.game.getValidMoves(board, 1)
         candidates = []
         if self.depth == 0:
@@ -92,19 +92,19 @@ class MinimaxOthelloPlayer():
                 if valids[a]==0:
                     continue
                 nextBoard, _ = self.game.getNextState(board, 1, a)
-                score = self.minimax(nextBoard,-1,self.depth-1,self.alpha,self.beta)
+                score = self.minimax(nextBoard,-1,self.depth,self.alpha,self.beta)
                 candidates += [(-score, a)]
         else:
             start = perf_counter()
             endtime = start + self.maxtime
-            for i in range(1,self.depth+1):
+            for i in range(0,self.depth):
                 
                 temp_candidates = []
                 for a in range(self.game.getActionSize()):
                     if valids[a]==0:
                         continue
                     nextBoard, _ = self.game.getNextState(board, 1, a)
-                    score = self.minimax(nextBoard,-1,i-1,self.alpha,self.beta,endtime=endtime)
+                    score = self.minimax(nextBoard,-1,i,self.alpha,self.beta,endtime=endtime)
                     temp_candidates += [(-score, a)]
                 if perf_counter() < endtime:
                     candidates = temp_candidates
@@ -116,6 +116,8 @@ class MinimaxOthelloPlayer():
         candidates.sort()
         best_indices = [i for i,x in enumerate(candidates) if x[0]==candidates[0][0]]
         random_best_indice = np.random.choice(best_indices)
+        if return_depth == True:
+            return (candidates[random_best_indice][1],)
         return candidates[random_best_indice][1]
 
 
@@ -166,6 +168,8 @@ class MinimaxOthelloPlayer():
 class NeuralNetworkPlayer():
     def __init__(self,game,nnet,args,name="NeuralPlayer"):
         self.game = game
+        self.args = args
+        self.nnet = nnet
         self.mctsStart = MCTS(game,nnet,args)
         self.mcts = MCTS(game,nnet,args)
         self.name = name
@@ -174,12 +178,12 @@ class NeuralNetworkPlayer():
         self.mcts = self.mctsStart
 
 
-    def play(self,board,deterministic=False):
-        if deterministic == False:
+    def play(self,board,tempThreshold_over=True,details = False):
+        if tempThreshold_over:
             return np.argmax(self.mcts.getActionProb(board, temp=0))
-
         prob = self.mcts.getActionProb(board,temp=1)
         choice = np.random.choice(range(len(prob)),p=prob)
+
         return choice
         
 

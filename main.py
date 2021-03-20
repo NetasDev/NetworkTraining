@@ -14,26 +14,25 @@ coloredlogs.install(level='INFO')  # Change this to DEBUG to see more info.
 
 args = dotdict({
     'numIters': 1000,
-    'numEps': 40,               # Number of complete self-play games to simulate during a new iteration.
+    'numEps':  100,             # Number of complete self-play games to simulate during a new iteration.
     'tempThreshold': 15,        #
-    'updateThreshold': 0.6,     # During arena playoff, new neural net will be accepted if threshold or more of games are won.
-    'maxlenOfQueue': 200000,      # Number of game examples to train the neural networks.
-    'numMCTSSims': 25,          # Number of games moves for MCTS to simulate.
-    'arenaCompare': 20,         # Number of games to play during arena play to determine if new net will be accepted.
+    'updateThreshold': 0.55,    # During arena playoff, new neural net will be accepted if threshold or more of games are won.
+    'numMCTSSims': 50,          # Number of games moves for MCTS to simulate.
+    'arenaCompare': 40,         # Number of games to play during arena play to determine if new net will be accepted.
     'cpuct': 1,
 
-    'checkpoint': './temp/EPStest/40/',
+    'checkpoint': './temp/Othello8x8/LearningRate/01/',
     'load_model': False,
-    'load_folder_file': ('/dev/models/8x100x50','best'),
-    'numItersForTrainExamplesHistory': 20,
-    'maxtime': 500,
+    'load_folder_file': ('./temp/Othello8x8/FirstModel/','best'),
+    'numItersForTrainExamplesHistory': 10,
+    'maxtime': 10800,
 
-    'wandb_project':'EpsTest2'
+    'wandb_project':'Othello8x8 - learning rate'
 })
 
 def main():
     log.info('Loading %s...', Game.__name__)
-    g = Game(6)
+    g = Game(8)
 
     log.info('Loading %s...', nn.__name__)
     nnet = nn(g)
@@ -49,27 +48,14 @@ def main():
 
     if args.load_model:
         log.info("Loading 'trainExamples' from file...")
-        c.loadTrainExamples()
+        #c.loadTrainExamples()
 
-    wandb.init(project=args.wandb_project,config=args,reinit=True)
+    run = wandb.init(project=args.wandb_project,config=args,reinit=True)
 
     log.info('Starting the learning process 🎉')
     c.learn()
     run.finish()
 
 
+
 main()
-args.checkpoint = './temp/EPStest2/80/'
-args.numEps = 80
-main()
-args.checkpoint = './temp/EPStest2/160/'
-args.numEps = 160
-main()
-
-
-
-
-"""
-if __name__ == "__main__":
-    main()
-"""
