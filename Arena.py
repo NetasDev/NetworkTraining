@@ -56,7 +56,7 @@ class Arena():
         it = 0
         while self.game.getGameEnded(board, curPlayer) == 0:
             it += 1
-            action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it>self.det_turns)
+            action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it<self.det_turns)
 
             valids = self.game.getValidMoves(self.game.getCanonicalForm(board, curPlayer), 1)
 
