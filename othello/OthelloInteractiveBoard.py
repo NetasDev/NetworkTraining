@@ -102,6 +102,8 @@ class InteractiveBoard():
         pygame.init()
         board = self.game.getInitBoard()
         self.board_history.append(self.board)
+        self.player1.reset()
+        self.player2.reset()
 
         #FPS = 60
         run = True
