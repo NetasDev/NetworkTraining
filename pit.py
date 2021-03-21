@@ -121,7 +121,7 @@ neuralplayer.name = "16h_player"
 Arena.Arena.play_one_against_many(neuralplayer,folder,200,game,8,savefolder="./one_many_2/")
 """
 
-
+"""
 network = nn(game)
 folder = "./temp/Othello6x6/SecondModel/"
 network.load_checkpoint(folder=folder,filename="best")
@@ -135,9 +135,15 @@ worstplayer = NeuralNetworkPlayer(game,network2,args,name="worst player")
 
 arena = Arena.Arena(bestplayer,worstplayer,game,tempThreshold=8)
 print(arena.playGames(600,save = "./newTry/"))
-
+"""
 
 """
 Inboard = InteractiveBoard.load("./newTry/game6")
 Inboard.show_replay()
 """
+
+network = nn(game)
+folder = "./temp/Othello6x6/LearningRate/001/"
+network.load_checkpoint(folder=folder,filename="best")
+args = dotdict({'numMCTSSims': 50, 'cpuct': 1.0})
+bestplayer = NeuralNetworkPlayer(game,network,args,name="best player")
