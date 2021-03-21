@@ -62,12 +62,13 @@ This Board shows the current board, the possible moves of the current player und
 #print(arena.player2.name + " : "+ str(player2wins))
 #print("draws : " +str(draws))
 """
+"""
 TK By setting save to a path all games played will by saved in the folder at the given path.   
 Afterwards they can be loaded and shown as a replay
 """
 
-#InBoard = InteractiveBoard.load("./newFolder/testgames2/game0")
-#InBoard.show_replay()
+InBoard = InteractiveBoard.load("./newFolder/testgames2/game0")
+InBoard.show_replay()
 
 """
 TK There is also the Option to play a tournament between two or more players

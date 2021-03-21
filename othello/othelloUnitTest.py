@@ -1,7 +1,6 @@
 import unittest
 from OthelloGame import *
 import numpy as np
-import numpy.testing as nptest
 
 class TestStringMethods(unittest.TestCase):
     def test_base_functions_8x8(self):

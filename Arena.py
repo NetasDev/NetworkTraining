@@ -146,6 +146,7 @@ class Arena():
         draws = np.zeros((len(players),len(players)),dtype=int)
         names = []
 
+        """
         for i in range(len(players)):
             names.append(players[i].name)
             for j in range(len(players)):
@@ -156,6 +157,21 @@ class Arena():
                         save = False
                     arena = Arena(players[i],players[j],game,tempThreshold=tempThreshold)
                     wins[i][j],_,draws[i][j] = arena.playGames(num_matches,save=save)
+        """
+        
+        for i in range(0,len(players)):
+            print(i)
+            names.append(players[i].name)
+            j = i+1
+            while j<=len(players)-1:
+                arena = Arena(players[i],players[j],game,tempThreshold=tempThreshold)
+                if savefolder!= False:
+                    save = savefolder +"/"+ players[i].name +"VS" +players[j].name+"/"
+                else:
+                    save = False
+                wins[i][j],wins[j][i],draws[i][j] = arena.playGames(num_matches,save=save)
+                #print(players[i].name +" played against "+players[j].name + " with " + str(wins[i][j])+" wins and " + str(wins[j][i])+ "losses")
+                j = j+1
 
         print(names)
         df = pd.DataFrame(wins,columns=names,index=names)
