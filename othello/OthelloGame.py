@@ -105,24 +105,36 @@ class OthelloGame(Game):
         return b.countDiff(player)
 
     def action_to_move(self,action):
-        move = (int(action/self.n), action%self.n)
+        if int(action/self.n)>=self.n:
+            return "skip"
+        move = (chr(97+int(action/self.n)), action%self.n)
         return move
 
-    def get_num_corner_stones(self,player,board,legalMoves):
+######################################################################################################
+    def get_better_value(self,player,board):
+        max_player_moves = self.get_legal_moves(board,player)
+        min_player_moves = self.get_legal_moves(board,-player)
+        
+        vc = self.get_coin_parity(board,player)
+        vm = self.get_mobility_score(board,player,player_moves,opponent_moves)
+
+    def get_corner_score(self,player,board,legalMoves):
         score = 0
         corner_squares = ((0,0),(0,self.n-1),(self.n-1,0),(self.n-1,self.n-1))
         for x,y in corner_squares:
             if board[x][y]==player:
                 score += 1
-            
-    """
-    def get_corner_heuristic_value(self,maxplayer,board):
-        max_corner_value = self.get_num_corner_stones(maxplayer,board)
-        min_corner_value = self.get_num_corner_stones(maxplayer*-1,board)
+            if (x,y) in legalMoves:
+                score += 0.5
+
+        
+    def get_corner_value(self,maxplayer,board):
+        max_corner_value = self.get_corner_score(maxplayer,board)
+        min_corner_value = self.get_corner_score(maxplayer*-1,board)
         if(max_corner_value+min_corner_value)!=0:
-            return 100*(max_corner_value)
-        else:
-            return 0
+            return 0.25*(max_corner_value-min_corner_value)/(max_corner_value+min_corner_value)
+        return 0
+    
     """
     def get_only_pieces_of_player(self,board,player):
         new_board = board.copy()
@@ -131,20 +143,44 @@ class OthelloGame(Game):
         else:
             new_board[new_board<0]=0
         return new_board
+    """
 
-    def get_coin_parity(self,board,maxplayer):
-        maxscore = np.sum(self.get_only_pieces_of_player(board,maxplayer))
-        minscore = -1*np.sum(self.get_only_pieces_of_player(board,maxplayer*-1))
-        return 100*(maxscore-minscore)/(maxscore+minscore)
+    def get_coin_value(self,board,maxplayer):
+        maxscore = sum(board[board==maxplayer])
+        minscore = -sum(board[board==-maxplayer])
+        return (maxscore-minscore)/(maxscore+minscore)
 
-    def get_mobility_score(self,board,maxplayer):
-        maxpmv = len(self.getValidMoves(board,maxplayer))
-        minpmv = len(self.getValidMoves(board,maxplayer*-1))
+    def get_mobility_value(self,board,player,player_moves,opponent_moves):
+        pamv = len(player_moves[player_moves==1])
+        oamv = len(opponent_moves[opponent_moves==1])
 
-        if (maxpmv+minpmv)!=0:
-            return 100*(maxpmv-minpmv)/(maxpmv+minpmv)
+        empty_neighbours = []
+        for pos in np.argwhere(board==-player):
+            empty_neighbours += self.get_empty_neighbours(board,pos)
+            unique_empty_neighbours = set(empty_neighbours)
+        ppmv = len(unique_empty_neighbours)
+        empty_neighbours = []
+        for pos in np.argwhere(board==player):
+            empty_neighbours += self.get_empty_neighbours(board,pos)
+            unique_empty_neighbours = set(empty_neighbours)
+        opmv = len(unique_empty_neighbours)
+    
+        if  ((pamv +0.5*ppmv) + (oamv +0.5*opmv))!=0:
+            value = ((pamv +0.5*ppmv) - (oamv +0.5*opmv)) / ((pamv +0.5*ppmv) + (oamv +0.5*opmv))
         else:
-            return 0
+            value = 0
+        return value
+
+    def get_empty_neighbours(self,board,position):
+        empty_neighbours = []
+        for i in range(-1,2):
+            for j in range(-1,2):
+                if not(i==position[0] and j ==position[1]):
+                    if position[0]+i>=0 and position[0]+i<self.n and position[1]+j>=0 and position[1]+j<self.n:
+                        if board[position[0]+i][position[1]+j] == 0:
+                            empty_neighbours.append(((position[0]+i),(position[1]+j)))
+        return empty_neighbours
+
 
     def get_static_weight_score(self,board,maxplayer):
         if self.n == 8:
@@ -156,9 +192,20 @@ class OthelloGame(Game):
                                 [ 2,-1, 1, 0, 0, 1,-1, 2],
                                 [-3,-4,-1,-1,-1,-1,-4,-3],  
                                 [ 4,-3, 2, 2, 2, 2,-3, 4]))
-            return np.sum(weights*self.get_only_pieces_of_player(board,maxplayer)) + np.sum(weights*self.get_only_pieces_of_player(board,-maxplayer))
+            #return (np.sum(weights*self.get_only_pieces_of_player(board,maxplayer)) + np.sum(weights*self.get_only_pieces_of_player(board,-maxplayer)))/112
+            return sum(board*weights) / 112
+            # 112 is the maximum difference possible with 56 for player 1 and -56 for player 2
+        if self.n == 6:
+            weights = np.array(([ 5,-3, 3, 3,-3, 5],
+                                [-3,-4,-1,-1,-4,-3],
+                                [ 3,-1, 1, 1,-1, 3],
+                                [ 3,-1, 1, 1,-1, 3],
+                                [-3,-4,-1,-1,-4,-3],  
+                                [ 5,-3, 3, 3,-3, 5]))
+            #return (np.sum(weights*self.get_only_pieces_of_player(board,maxplayer)) + np.sum(weights*self.get_only_pieces_of_player(board,-maxplayer)))/96
 
-
+            # 96 is the maximum difference possible with 48 for player 1 and -48 for player 2
+"""
     @staticmethod
     def display(board):
         n = board.shape[0]
@@ -175,3 +222,4 @@ class OthelloGame(Game):
             print("|")
 
         print("-----------------------")
+"""

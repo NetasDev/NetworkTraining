@@ -1,6 +1,7 @@
 import unittest
-from OthelloGame import *
 import numpy as np
+from OthelloGame import *
+
 
 class TestStringMethods(unittest.TestCase):
     def test_base_functions_8x8(self):
@@ -19,9 +20,9 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual((8,8),game.getBoardSize())
         self.assertEqual(65,game.getActionSize())
 
-        self.assertEqual(game.action_to_move(4),(0,4))
-        self.assertEqual(game.action_to_move(27),(3,3))
-        self.assertEqual(game.action_to_move(64),(8,0))
+        self.assertEqual(game.action_to_move(4),("a",4))
+        self.assertEqual(game.action_to_move(27),("d",3))
+        self.assertEqual(game.action_to_move(64),"skip")
 
 
         expected_board =  np.array(([ 0, 0, 0, 0, 0, 0, 0, 0],
@@ -77,7 +78,7 @@ class TestStringMethods(unittest.TestCase):
                                     [ 0, 0, 0, 0, 0, 0, 0, 0],
                                     [ 0, 0, 0, 0, 0, 0, 0, 0]))
         after_board = game.getCanonicalForm(start_board,-1)
-        after_board2 = game.getCanonicalForm(start_board,-1)
+        after_board2 = game.getCanonicalForm(start_board,1)
         self.assertTrue((after_board==expected_board).all())
         self.assertTrue((after_board2==start_board).all())
 
@@ -103,37 +104,7 @@ class TestStringMethods(unittest.TestCase):
         self.assertTrue((after_board==expected_board).all())
         self.assertTrue((after_board2==start_board).all())
 
-        start_board = np.array(([ 0, 0, 0, 0, 0, 0, 0, 0],
-                                [ 0, 0, 0, 1, 1, 1, 1, 0],
-                                [ 0, 0, 0, 1,-1,-1,-1, 0],
-                                [-1,-1,-1, 1, 1, 0, 0, 0],
-                                [ 1, 1, 1, 1,-1, 1, 0, 0],
-                                [ 0, 0, 0,-1, 0, 0, 0, 0],
-                                [ 0, 0, 0, 0, 0, 0, 0, 0],
-                                [ 0, 0, 0, 0, 0, 0, 0, 0]))
 
-        expected_board =  np.array(([ 0, 0, 0, 0, 0, 0, 0, 0],
-                                    [ 0, 0, 0, 1, 1, 1, 1, 0],
-                                    [ 0, 0, 0, 1, 0, 0, 0, 0],
-                                    [ 0, 0, 0, 1, 1, 0, 0, 0],
-                                    [ 1, 1, 1, 1, 0, 1, 0, 0],
-                                    [ 0, 0, 0, 0, 0, 0, 0, 0],
-                                    [ 0, 0, 0, 0, 0, 0, 0, 0],
-                                    [ 0, 0, 0, 0, 0, 0, 0, 0]))
-
-        expected_board2 = np.array(([ 0, 0, 0, 0, 0, 0, 0, 0],
-                                    [ 0, 0, 0, 0, 0, 0, 0, 0],
-                                    [ 0, 0, 0, 0,-1,-1,-1, 0],
-                                    [-1,-1,-1, 0, 0, 0, 0, 0],
-                                    [ 0, 0, 0, 0,-1, 0, 0, 0],
-                                    [ 0, 0, 0,-1, 0, 0, 0, 0],
-                                    [ 0, 0, 0, 0, 0, 0, 0, 0],
-                                    [ 0, 0, 0, 0, 0, 0, 0, 0]))
-
-        after_board = game.get_only_pieces_of_player(start_board,1)
-        after_board2 = game.get_only_pieces_of_player(start_board,-1)
-        self.assertTrue((after_board==expected_board).all())
-        self.assertTrue((after_board2==expected_board2).all())
 
     
     def test_base_functions_6x6(self):
@@ -150,14 +121,14 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual((6,6),game.getBoardSize())
         self.assertEqual(37,game.getActionSize())
 
-        self.assertEqual(game.action_to_move(4),(0,4))
-        self.assertEqual(game.action_to_move(15),(2,3))
-        self.assertEqual(game.action_to_move(37),(7,0))
+        self.assertEqual(game.action_to_move(4),("a",4))
+        self.assertEqual(game.action_to_move(15),("c",3))
+        self.assertEqual(game.action_to_move(36),"skip")
 
 
         expected_board =  np.array(([ 0, 0, 0, 0, 0, 0],
                                     [ 0, 0, 1, 0, 0, 0],
-                                    [ 0, 0,-1, 1, 0, 0],
+                                    [ 0, 0, 1, 1, 0, 0],
                                     [ 0, 0, 1,-1, 0, 0],
                                     [ 0, 0, 0, 0, 0, 0],
                                     [ 0, 0, 0, 0, 0, 0]))
@@ -199,7 +170,7 @@ class TestStringMethods(unittest.TestCase):
                                     [ 0, 0, 0,-1, 0, 0]))
 
         after_board = game.getCanonicalForm(start_board,-1)
-        after_board2 = game.getCanonicalForm(start_board,-1)
+        after_board2 = game.getCanonicalForm(start_board,1)
         self.assertTrue((after_board==expected_board).all())
         self.assertTrue((after_board2==start_board).all())
 
@@ -221,60 +192,40 @@ class TestStringMethods(unittest.TestCase):
         self.assertTrue((after_board==expected_board).all())
         self.assertTrue((after_board2==start_board).all())
 
-        start_board =     np.array(([ 0, 0,-1, 0, 0, 0],
-                                    [ 0, 0,-1, 0, 0, 0],
-                                    [ 0, 0,-1,-1, 0, 0],
-                                    [ 0,-1,-1, 1, 0, 0],
-                                    [ 0, 1,-1, 1, 1, 0],
-                                    [ 0, 1, 1, 1, 1, 0]))
 
-        expected_board =  np.array(([ 0, 0, 1, 0, 0, 0],
-                                    [ 0, 0, 1, 0, 0, 0],
-                                    [ 0, 0, 1, 1, 0, 0],
-                                    [ 0, 1, 1,-1, 0, 0],
-                                    [ 0,-1, 1,-1,-1, 0],
-                                    [ 0,-1,-1,-1,-1, 0]))
+    def test_value_functions_8x8(self):
+        game = OthelloGame(8)
+        test_board_1 =np.array(([ 0, 0, 0, 0, 0, 0, 0, 0],
+                                [ 0, 0, 0, 0, 0, 0, 0, 0],
+                                [ 0, 0, 0, 1, 1, 0, 0, 0],
+                                [ 0, 0, 0, 1, 1,-1, 0, 0],
+                                [ 0, 0, 0, 1, 1, 0, 0, 0],
+                                [ 0, 0, 0, 0, 0, 0, 0, 0],
+                                [ 0, 0, 0, 0, 0, 0, 0, 0],
+                                [ 0, 0, 0, 0, 0, 0, 0, 0]))
 
-        expected_board2 =  np.array(([ 0, 0, 1, 0, 0, 0],
-                                     [ 0, 0, 1, 0, 0, 0],
-                                     [ 0, 0, 1, 1, 0, 0],
-                                     [ 0, 1, 1,-1, 0, 0],
-                                     [ 0,-1, 1,-1,-1, 0],
-                                     [ 0,-1,-1,-1,-1, 0]))
+        test_board_2 =np.array(([ 0, 0, 0, 0, 0, 0, 0, 0],
+                                [ 0, 0, 0, 0, 0, 0, 0, 0],
+                                [ 0, 0, 0, 1, 1, 0, 0, 0],
+                                [ 0, 0, 0, 1, 1, 1, 0, 0],
+                                [ 0, 0, 0, 1, 1, 0, 0, 0],
+                                [ 0, 0, 0, 1, 1, 1, 0, 0],
+                                [ 0, 0, 0, 0, 0, 0, 0, 0],
+                                [ 0, 0, 0, 0, 0, 0, 0, 0]))
+        
+        
+        v = -4/15
+        self.assertEqual(game.get_mobility_value(test_board_1,1,game.getValidMoves(test_board_1,1),game.getValidMoves(test_board_1,-1)), v)
+        self.assertEqual(game.get_coin_value(test_board_1,1),5/7)
+        self.assertEqual(game.get_coin_value(test_board_1,-1),-5/7)
+        self.assertEqual(game.get_coin_value(test_board_2,1))
 
-        after_board = game.get_only_pieces_of_player(start_board,1)
-        after_board2 = game.get_only_pieces_of_player(start_board,-1)
-        self.assertTrue((after_board==expected_board).all())
-        self.assertTrue((after_board2==expected_board2).all())
-
-
+        
 
         
 
 
         
-        
-        
-
-
-        
-
-
-"""
-    def test_upper(self):
-        self.assertEqual('foo'.upper(), 'FOO')
-
-    def test_isupper(self):
-        self.assertTrue('FOO'.isupper())
-        self.assertFalse('Foo'.isupper())
-
-
-    def test_split(self):
-        s = 'hello world'
-        self.assertEqual(s.split(), ['hello', 'world'])
-        # check that s.split fails when the separator is not a string
-        with self.assertRaises(TypeError):
-            s.split(2)
-"""
+    
 if __name__ == '__main__':
     unittest.main()
