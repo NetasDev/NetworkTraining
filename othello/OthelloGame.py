@@ -7,6 +7,7 @@ sys.path.insert(0,parentdir)
 from Game import Game
 from othello.OthelloLogic import Board
 import numpy as np
+from time import perf_counter
 
 class OthelloGame(Game):
     square_content = {
@@ -68,8 +69,11 @@ class OthelloGame(Game):
             return 0
         if b.has_legal_moves(-player):
             return 0
-        if b.countDiff(player) > 0:
+        dif = b.countDiff(player)
+        if  dif > 0:
             return 1
+        if dif == 0:
+            return -0.05
         return -1
 
     def getCanonicalForm(self, board, player):
@@ -100,13 +104,22 @@ class OthelloGame(Game):
         return board_s
 
     def getScore(self, board, player):
+
         b = Board(self.n)
         b.pieces = np.copy(board)
         return b.countDiff(player)
 
     def action_to_move(self,action):
-        move = (int(action/self.n), action%self.n)
-        return move
+        if action !=None:
+            move = (action%self.n,int(action/self.n))
+            return move
+        return None
+
+    def move_to_action(self,move):
+        if move != None:
+            action = move[0]*self.n +move[1]
+            return action
+        return None 
 
     def get_num_corner_stones(self,player,board,legalMoves):
         score = 0
