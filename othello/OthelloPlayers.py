@@ -23,7 +23,7 @@ class HumanOthelloPlayer():
         self.game = game
         self.name = "Human"
 
-    def play(self, board):
+    def play(self, board,deterministic=True):
         # display(board)
         valid = self.game.getValidMoves(board, 1)
         for i in range(len(valid)):
@@ -45,6 +45,9 @@ class HumanOthelloPlayer():
                     'Invalid integer'
             print('Invalid move')
         return a
+
+    def reset(self):
+        return
 
 
 class GreedyOthelloPlayer():

@@ -16,7 +16,7 @@ class InteractiveBoard():
         self.side_screen_size = 400
         self.screen_size = 1000
         self.square_size = 1000/self.size
-        self.space = self.square_size/8
+        self.space = self.square_size/12
         self.board= self.game.getInitBoard()
         self.board_history = []
         self.action_history = []
@@ -51,6 +51,7 @@ class InteractiveBoard():
         screen.fill((0,110,0))
         for row in range(self.size+2):
             pygame.draw.line(screen,(0,0,0),(row*self.square_size,0),(row*self.square_size,self.screen_size),width=4)
+            pygame.draw.line(screen,(0,0,0),(0,row*self.square_size),(self.screen_size,row*self.square_size),width=4)
 
         #for col in range(self.size):
     
@@ -95,21 +96,21 @@ class InteractiveBoard():
                     pygame.draw.circle(screen,(0,0,0),(x,y),self.square_size/2-self.space/1.1)
                     pygame.draw.circle(screen,(255,255,255),(x,y),self.square_size/2-self.space)
         if self.game.getGameEnded(self.board,self.player_to_move) == 0:
+            """
             moves = self.game.getValidMoves(self.board, self.player_to_move)
             for n in range(len(moves)):
                 if moves[n]==1:
                     x = (int(n/self.size)+0.5)*self.square_size
                     y = ((n%self.size)+0.5)*self.square_size
                     if int(n/self.size) == self.game.n:
-                        pygame.draw.circle(screen,(40,40,40),(x,y),self.square_size/2-self.space/1.1)
+                        pygame.draw.circle(screen,(40,40,40),(x,y),self.square_size/2-self.space/1.15)
                         pygame.draw.circle(screen,(255,255,255),(x,y),self.square_size/2-self.space)
                         Game_Font = pygame.freetype.Font(None,24)
                         Game_Font.render_to(screen,(x-24,y-12),"Skip",(0,0,0))
                         break
                     pygame.draw.circle(screen,(0,0,0),(x,y),self.square_size/2-self.space/1.1)
                     pygame.draw.circle(screen,(0,110,0),(x,y),self.square_size/2-self.space)
-
-            #for move in moves:
+            """
 
     def play_game(self):
         pygame.init()
@@ -118,19 +119,22 @@ class InteractiveBoard():
         self.player1.reset()
         self.player2.reset()
 
-        #FPS = 60
         run = True
-        #clock = pygame.time.Clock()
-        screen = pygame.display.set_mode((self.screen_size+self.side_screen_size,self.screen_size))
+
+        screen = pygame.display.set_mode((self.screen_size,self.screen_size))
+        """+self.side_screen_size"""
         self.draw_field(screen)
         self.draw_side_board(screen)
         self.draw_board(screen)
         pygame.display.update()
         while run:
-            #clock.tick(FPS)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_1:
+                        print("hello")
+                        pygame.image.save(screen,"testfile.jpg")
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if self.human_players_turn():
                         pos = pygame.mouse.get_pos()
@@ -182,7 +186,6 @@ class InteractiveBoard():
         #InBoard = InteractiveBoard(board,game,len(board))
         #FPS = 60
         run = True
-        #clock = pygame.time.Clock()
         screen = pygame.display.set_mode((self.screen_size+self.side_screen_size,self.screen_size))
         while run:
             #clock.tick(FPS)
