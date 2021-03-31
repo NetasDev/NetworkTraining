@@ -63,9 +63,9 @@ class GreedyOthelloPlayer():
                 continue
             nextBoard, _ = self.game.getNextState(board, 1, a)
             score = self.game.getScore(nextBoard, 1)
-            candidates += [(-score, a)]
+            candidates += [(score, a)]
         
-        candidates.sort()
+        candidates.sort(reverse=True)
         rand_options = []
         best_indices = [i for i,x in enumerate(candidates) if x[0]==candidates[0][0]]
         random_best_indice = np.random.choice(best_indices)
@@ -81,19 +81,21 @@ class MinimaxOthelloPlayer():
         self.name = "Minimax"
         self.mode = mode
 
-    def play(self,board,deterministic=True,return_depth = False):
+    def play(self,board,deterministic=True,details = False):
         valids = self.game.getValidMoves(board, 1)
         candidates = []
+        depth = 0
         if self.depth == 0:
             print("depth has to be atleast 1")
 
         if self.maxtime == 0:
+            depth = self.depth
             for a in range(self.game.getActionSize()):
                 if valids[a]==0:
                     continue
                 nextBoard, _ = self.game.getNextState(board, 1, a)
                 score = self.minimax(nextBoard,-1,self.depth,self.alpha,self.beta)
-                candidates += [(-score, a)]
+                candidates += [(score, a)]
         else:
             start = perf_counter()
             endtime = start + self.maxtime
@@ -105,19 +107,19 @@ class MinimaxOthelloPlayer():
                         continue
                     nextBoard, _ = self.game.getNextState(board, 1, a)
                     score = self.minimax(nextBoard,-1,i,self.alpha,self.beta,endtime=endtime)
-                    temp_candidates += [(-score, a)]
+                    temp_candidates += [(score, a)]
                 if perf_counter() < endtime:
                     candidates = temp_candidates
-                    
                 else:
-                    print("depth: "+str(i))
+                    depth = i-1
                     break
         
-        candidates.sort()
+        candidates.sort(reverse=True)
+        print(candidates)
         best_indices = [i for i,x in enumerate(candidates) if x[0]==candidates[0][0]]
         random_best_indice = np.random.choice(best_indices)
-        if return_depth == True:
-            return (candidates[random_best_indice][1],)
+        if details == True:
+            return (candidates[random_best_indice][1],candidates[random_best_indice][0],depth)
         return candidates[random_best_indice][1]
 
 
@@ -139,9 +141,10 @@ class MinimaxOthelloPlayer():
                     return self.game.get_mobility_score(board,1)+self.game.get_coin_parity(board,1)
                 return self.game.get_static_weight_score(board,1)
             if gameEnd == 1:
-                return math.inf
+                return math.inf*player
             if gameEnd == -1:
-                return -math.inf
+                return -math.inf*player
+            return gameEnd 
         if player == 1:
             score = -math.inf
             for a in range(self.game.getActionSize()):
@@ -166,25 +169,36 @@ class MinimaxOthelloPlayer():
             return score
 
 class NeuralNetworkPlayer():
-    def __init__(self,game,nnet,args,name="NeuralPlayer"):
+    def __init__(self,game,nnet,args,maxtime=0,name="NeuralPlayer"):
         self.game = game
         self.args = args
         self.nnet = nnet
         self.mctsStart = MCTS(game,nnet,args)
         self.mcts = MCTS(game,nnet,args)
         self.name = name
-
+        self.maxtime = maxtime
     def reset(self):
         self.mcts = self.mctsStart
 
 
     def play(self,board,tempThreshold_over=True,details = False):
         if tempThreshold_over:
-            return np.argmax(self.mcts.getActionProb(board, temp=0))
-        prob = self.mcts.getActionProb(board,temp=1)
-        choice = np.random.choice(range(len(prob)),p=prob)
+            if details:
+                pi,Qs,simulations = self.mcts.getActionProb(board,temp=0,details=True,time=self.maxtime)
+                a = np.argmax(pi)
+                return a,float(Qs[a]),simulations
+            else:
+                return np.argmax(self.mcts.getActionProb(board, temp=0,time=self.maxtime))
 
-        return choice
+        if details:
+            pi,Qs,simulations = self.mcts.getActionProb(board,temp=0,details=True,time=self.maxtime)
+            choice = np.random.choice(range(len(pi)),p=pi)
+            return choice, float(Qs[choice]),simulations
+        else:
+                
+            prob = self.mcts.getActionProb(board,temp=1,time=self.maxtime)
+            choice = np.random.choice(range(len(prob)),p=prob)
+            return choice
         
 
     

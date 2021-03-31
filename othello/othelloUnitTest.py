@@ -19,9 +19,9 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual((8,8),game.getBoardSize())
         self.assertEqual(65,game.getActionSize())
 
-        self.assertEqual(game.action_to_move(4),(0,4))
+        self.assertEqual(game.action_to_move(4),(4,0))
         self.assertEqual(game.action_to_move(27),(3,3))
-        self.assertEqual(game.action_to_move(64),(8,0))
+        self.assertEqual(game.action_to_move(64),(0,8))
 
 
         expected_board =  np.array(([ 0, 0, 0, 0, 0, 0, 0, 0],
@@ -150,9 +150,9 @@ class TestStringMethods(unittest.TestCase):
         self.assertEqual((6,6),game.getBoardSize())
         self.assertEqual(37,game.getActionSize())
 
-        self.assertEqual(game.action_to_move(4),(0,4))
-        self.assertEqual(game.action_to_move(15),(2,3))
-        self.assertEqual(game.action_to_move(37),(7,0))
+        self.assertEqual(game.action_to_move(4),(4,0))
+        self.assertEqual(game.action_to_move(15),(3,2))
+        self.assertEqual(game.action_to_move(37),(0,7))
 
 
         expected_board =  np.array(([ 0, 0, 0, 0, 0, 0],

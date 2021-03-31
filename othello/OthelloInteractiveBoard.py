@@ -10,9 +10,6 @@ class InteractiveBoard():
         self.player2 = player2
         self.player1_name = self.player1.name
         self.player2_name = self.player2.name
-        self.args_player1 = None
-        self.args_player2 = None
-        
         self.game = game
         self.player_to_move = 1
         self.size = self.game.n
@@ -22,13 +19,26 @@ class InteractiveBoard():
         self.space = self.square_size/8
         self.board= self.game.getInitBoard()
         self.board_history = []
-        self.move_history = []
+        self.action_history = []
+        self.prediction_history = []
         self.move = 0
 
-    def get_last_move(self,player):
-        for i in range(len(self.move_history)):
-            if self.move_history[len(self.move_history)-i-1][0] == player:
-                return self.move_history[len(self.move_history)-i-1][1]
+    def get_last_action(self,player):
+        for i in range(len(self.action_history)):
+            if self.action_history[len(self.action_history)-i-1][0] == player:
+                return self.action_history[len(self.action_history)-i-1][1]
+        return None
+    
+    def get_last_prediction(self,player):
+        for i in range(len(self.prediction_history)):
+            if self.prediction_history[len(self.prediction_history)-i-1][0] == player:
+                return self.prediction_history[len(self.prediction_history)-i-1][1]
+        return None
+
+    def get_last_depth(self,player):
+        for i in range(len(self.prediction_history)):
+            if self.prediction_history[len(self.prediction_history)-i-1][0] == player:
+                return self.prediction_history[len(self.prediction_history)-i-1][2]
         return None
     
     def human_players_turn(self):
@@ -56,18 +66,21 @@ class InteractiveBoard():
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,150),"Player 1:",(0,0,0))
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,200),self.player1_name,(0,0,0))
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,250),"Last Move:",(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,250),str(self.get_last_move(1)),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,250),str(self.game.action_to_move(self.get_last_action(1))),(0,0,0))
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,300),"Score:",(0,0,0))
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+100,300),str(self.game.getScore(self.board,1)),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+100,350),str(self.get_last_prediction(1))[:6],(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+100,400),str(self.get_last_depth(1)),(0,0,0))
 
 
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,550),"Player 2:",(0,0,0))
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,600),self.player2_name,(0,0,0))
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,650),"Last Move:",(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,650),str(self.get_last_move(-1)),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,650),str(self.game.action_to_move(self.get_last_action(-1))),(0,0,0))
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,700),"Score:",(0,0,0))
         Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,700),str(self.game.getScore(self.board,-1)),(0,0,0))
-        
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,750),str(self.get_last_prediction(-1))[:8],(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+100,800),str(self.get_last_depth(-1)),(0,0,0))
         
 
     def draw_board(self,screen):
@@ -127,16 +140,16 @@ class InteractiveBoard():
                             if moves[i]==1 and self.game.action_to_move(i)==(col,row):
                                 self.board, self.player_to_move = self.game.getNextState(self.board,self.player_to_move,i)
                                 self.board_history.append(self.board)
-                                self.move_history.append((self.player_to_move*-1,(col,row)))
+                                self.action_history.append((self.player_to_move*-1,self.game.move_to_action((col,row))))
 
             if not self.human_players_turn():
                 if self.player_to_move ==1:
-                    move = self.player1.play(self.game.getCanonicalForm(self.board,self.player_to_move))
+                    action = self.player1.play(self.game.getCanonicalForm(self.board,self.player_to_move))
                 else:
-                    move = self.player2.play(self.game.getCanonicalForm(self.board,self.player_to_move))
+                    action = self.player2.play(self.game.getCanonicalForm(self.board,self.player_to_move))
                 self.board,self.player_to_move = self.game.getNextState(self.board,self.player_to_move,move)
                 self.board_history.append(self.board)
-                self.move_history.append((self.player_to_move*-1,self.game.action_to_move(move)))
+                self.action_history.append((self.player_to_move*-1,action))
 
             self.draw_field(screen)
             self.draw_side_board(screen)
@@ -164,7 +177,8 @@ class InteractiveBoard():
         pygame.init()
         game = self.game
         board = self.board_history[0]
-        move_his = self.move_history
+        move_his = self.action_history
+        prediction_history = self.prediction_history 
         #InBoard = InteractiveBoard(board,game,len(board))
         #FPS = 60
         run = True
@@ -188,7 +202,9 @@ class InteractiveBoard():
                             self.player_to_move *= -1
                     
             self.board = self.board_history[self.move]
-            self.move_history = move_his[:self.move]
+            self.action_history = move_his[:self.move]
+            self.prediction_history = prediction_history[:self.move]
+            
             self.draw_field(screen)
             self.draw_side_board(screen)
             self.draw_board(screen)
