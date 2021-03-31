@@ -54,15 +54,10 @@ class Coach():
         episodeStep = 0
 
         while True:
-            self.mcts = MCTS(self.game, self.nnet, self.args)  # reset search tree
+            #self.mcts = MCTS(self.game, self.nnet, self.args)  # reset search tree
             episodeStep += 1
             canonicalBoard = self.game.getCanonicalForm(board, self.curPlayer)
             temp = int(episodeStep < self.args.tempThreshold)
-
-            print(episodeStep)
-            for element in self.mcts.Qsa:
-                print(element)
-                break
 
             pi = self.mcts.getActionProb(canonicalBoard, temp=temp)
             sym = self.game.getSymmetries(canonicalBoard, pi)
@@ -75,7 +70,11 @@ class Coach():
             r = self.game.getGameEnded(board, self.curPlayer)
 
             if r != 0:
-                return [(x[0], x[2], r * ((-1) ** (x[1] != self.curPlayer))) for x in trainExamples]
+                if r!=1 and r!= -1:
+                    return [(x[0],x[2],r) for x in trainExamples]
+                    
+                else:
+                    return [(x[0], x[2], r * ((-1) ** (x[1] != self.curPlayer))) for x in trainExamples]
 
     def learn(self):
         """
@@ -99,6 +98,7 @@ class Coach():
                 iterationTrainExamples = []
 
                 for _ in tqdm(range(self.args.numEps), desc="Self Play"):
+                    self.mcts = MCTS(self.game, self.nnet, self.args)  # reset search tree
                     iterationTrainExamples += self.executeEpisode()
 
                 # save the iteration examples to the history 
@@ -121,7 +121,7 @@ class Coach():
             #end of selfplay/start of training network
             start_time_training = perf_counter()
             # training new network, keeping a copy of the old one
-            
+
             if perf_counter() - start_time >self.args.maxtime:
                 print(perf_counter()-start_time)
                 break
@@ -143,7 +143,7 @@ class Coach():
 
 
             log.info('NEW/PREV WINS : %d / %d ; DRAWS : %d' % (nwins, pwins, draws))
-            if pwins + nwins == 0 or float(nwins) / (pwins + nwins) < self.args.updateThreshold:
+            if pwins + nwins == 0 or float(nwins+0.45*draws) / (pwins + nwins + draws) < self.args.updateThreshold:
                 log.info('REJECTING NEW MODEL')
                 self.nnet.load_checkpoint(folder=self.args.checkpoint, filename='temp')
             else:

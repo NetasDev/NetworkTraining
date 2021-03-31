@@ -14,25 +14,25 @@ coloredlogs.install(level='INFO')  # Change this to DEBUG to see more info.
 
 args = dotdict({
     'numIters': 1000,
-    'numEps':  100,             # Number of complete self-play games to simulate during a new iteration.
-    'tempThreshold': 8,        #
+    'numEps': 100,             # Number of complete self-play games to simulate during a new iteration.
+    'tempThreshold': 15,        #
     'updateThreshold': 0.55,    # During arena playoff, new neural net will be accepted if threshold or more of games are won.
     'numMCTSSims': 50,          # Number of games moves for MCTS to simulate.
     'arenaCompare': 40,         # Number of games to play during arena play to determine if new net will be accepted.
     'cpuct': 1,
 
-    'checkpoint': './temp/Othello6x6/LearningRate/0001/',
+    'checkpoint': './temp/Othello8x8/First model',
     'load_model': False,
-    'load_folder_file': ('./temp/Othello8x8/FirstModel/','best'),
+    'load_folder_file': ('./temp/Othello6x6/First Model/','checkpoint_21'),
     'numItersForTrainExamplesHistory': 10,
-    'maxtime': 10800,
+    'maxtime': 43200,
 
-    'wandb_project':'Othello6x6 - learning rate'
+    'wandb_project':'Othello8x8 - 3h'
 })
 
 def main():
     log.info('Loading %s...', Game.__name__)
-    g = Game(6)
+    g = Game(8)
 
     log.info('Loading %s...', nn.__name__)
     nnet = nn(g)
@@ -49,6 +49,7 @@ def main():
     if args.load_model:
         log.info("Loading 'trainExamples' from file...")
         #c.loadTrainExamples()
+
 
     run = wandb.init(project=args.wandb_project,config=args,reinit=True)
 
