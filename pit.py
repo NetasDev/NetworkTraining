@@ -210,21 +210,22 @@ print(sum2*2/turn)
 print(InBoard.action_history)
 InBoard.show_replay()
 """
-"""
 
-args = dotdict({'numMCTSSims': 50000, 'cpuct': 1.0})
+
+args = dotdict({'numMCTSSims': 100, 'cpuct': 1.0})
 game = OthelloGame(6)
 network = nn(game)
 network.load_checkpoint(folder='./temp/Othello6x6/Third Model/',filename="best")
 neuralplayer = NeuralNetworkPlayer(game,network,args,name="final model")
-Arena.Arena.play_one_against_many(neuralplayer,"./temp/Othello6x6/Third Model/",100,game,8,savefolder="./previous generations 6x6/")
-"""
+Arena.Arena.play_one_against_many(neuralplayer,"./temp/Othello6x6/Third Model/",100,game,8,savefolder="./previous generations 6x6 2/")
 
+
+"""
 args = dotdict({'numMCTSSims': 50000, 'cpuct': 1.0})
 game = OthelloGame(6)
 network = nn(game)
 network.load_checkpoint(folder='./temp/Othello6x6/Third Model/',filename="best")
 neuralplayer = NeuralNetworkPlayer(game,network,args,name="final model",maxtime=1)
 minimax = MinimaxOthelloPlayer(game,100,mode=0,maxtime=1)
-
+"""
 
