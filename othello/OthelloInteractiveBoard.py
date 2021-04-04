@@ -107,7 +107,7 @@ class InteractiveBoard():
                     pygame.draw.circle(screen,(0,0,0),(x,y),self.square_size/2-self.space/1.1)
                     pygame.draw.circle(screen,(255,255,255),(x,y),self.square_size/2-self.space)
         if self.game.getGameEnded(self.board,self.player_to_move) == 0:
-            """
+            
             moves = self.game.getValidMoves(self.board, self.player_to_move)
             for n in range(len(moves)):
                 if moves[n]==1:
@@ -119,9 +119,10 @@ class InteractiveBoard():
                         Game_Font = pygame.freetype.Font(None,24)
                         Game_Font.render_to(screen,(x-24,y-12),"Skip",(0,0,0))
                         break
-                    pygame.draw.circle(screen,(0,0,0),(x,y),self.square_size/2-self.space/1.1)
+                    pygame.draw.circle(screen,(0,0,0),(x,y),self.square_size/2-self.space/1.2)
                     pygame.draw.circle(screen,(0,110,0),(x,y),self.square_size/2-self.space)
-            """
+            
+            ####
 
     def play_game(self):
         pygame.init()
@@ -152,7 +153,7 @@ class InteractiveBoard():
                         row,col = self.get_field_at_mouse_pos(pos)
                         moves = self.game.getValidMoves(self.board,self.player_to_move)
                         for i in range(len(moves)):
-                            if moves[i]==1 and self.game.action_to_move(i)==(col,row):
+                            if moves[i]==1 and self.game.action_to_move(i)==(chr(97+col),row):
                                 self.board, self.player_to_move = self.game.getNextState(self.board,self.player_to_move,i)
                                 self.board_history.append(self.board)
                                 self.action_history.append((self.player_to_move*-1,self.game.move_to_action((col,row))))
