@@ -13,7 +13,7 @@ class OthelloGame(Game):
         -1: "X",
         +0: "-",
         +1: "O"
-    }
+    }   
 
     @staticmethod
     def getSquarePiece(piece):
@@ -111,14 +111,20 @@ class OthelloGame(Game):
         return move
 
 ######################################################################################################
-    def get_better_value(self,player,board):
-        max_player_moves = self.get_legal_moves(board,player)
-        min_player_moves = self.get_legal_moves(board,-player)
+    def get_better_value(self,board,player):
+        player_moves = self.getValidMoves(board,player)
+        opponent_moves = self.getValidMoves(board,-player)
         
-        vc = self.get_coin_parity(board,player)
-        vm = self.get_mobility_score(board,player,player_moves,opponent_moves)
+        vcoin = self.get_coin_value(board,player)
+        vmob  = self.get_mobility_value(board,player,player_moves,opponent_moves)
+        vcorner = self.get_corner_value(board,player,player_moves,opponent_moves)
+        vstability = self.get_stability_value(board,player)
 
-    def get_corner_score(self,player,board,legalMoves):
+        print("coin: "+str(vcoin)+" mobility: "+str(vmob)+ " corner: "+ str(vcorner) + " stability: "+ str(vstability))
+
+        return 0.25*vcoin+0.25*vmob+0.25*vcorner+0.25*vstability
+
+    def get_corner_score(self,board,player,legalMoves):
         score = 0
         corner_squares = ((0,0),(0,self.n-1),(self.n-1,0),(self.n-1,self.n-1))
         for x,y in corner_squares:
@@ -126,13 +132,14 @@ class OthelloGame(Game):
                 score += 1
             if (x,y) in legalMoves:
                 score += 0.5
+        return score
 
-        
-    def get_corner_value(self,maxplayer,board):
-        max_corner_value = self.get_corner_score(maxplayer,board)
-        min_corner_value = self.get_corner_score(maxplayer*-1,board)
-        if(max_corner_value+min_corner_value)!=0:
-            return 0.25*(max_corner_value-min_corner_value)/(max_corner_value+min_corner_value)
+    def get_corner_value(self,board,player,player_moves,opponent_moves):
+
+        player_corner_score = self.get_corner_score(board,player,player_moves)
+        opponent_corner_score = self.get_corner_score(board,player*-1,opponent_moves)
+        if(player_corner_score+opponent_corner_score)!=0:
+            return (player_corner_score-opponent_corner_score)/(player_corner_score+opponent_corner_score)
         return 0
     
     """
@@ -145,10 +152,10 @@ class OthelloGame(Game):
         return new_board
     """
 
-    def get_coin_value(self,board,maxplayer):
-        maxscore = sum(board[board==maxplayer])
-        minscore = -sum(board[board==-maxplayer])
-        return (maxscore-minscore)/(maxscore+minscore)
+    def get_coin_value(self,board,player):
+        player_score = sum(board[board==player])
+        opponent_score = -sum(board[board==-player])
+        return (player_score-opponent_score)/(player_score+opponent_score)
 
     def get_mobility_value(self,board,player,player_moves,opponent_moves):
         pamv = len(player_moves[player_moves==1])
@@ -181,6 +188,77 @@ class OthelloGame(Game):
                             empty_neighbours.append(((position[0]+i),(position[1]+j)))
         return empty_neighbours
 
+            
+    def get_edge_stability_matrix(self,board,player):
+        n = self.n
+        corners = ((0,0),(n-1,0),(n-1,n-1),(0,n-1))
+        upper_edge = []
+        lower_edge = []
+        left_edge = []
+        right_edge = []
+        for i in range(1,n-1):
+            upper_edge.append((i,0))
+            right_edge.append((n-1,i))
+            lower_edge.append((i,n-1))
+            left_edge.append((0,i))
+            
+        edges = [upper_edge,right_edge,lower_edge,left_edge]
+        alignment = [(1,0),(0,1),(1,0),(0,1)]
+        stability_matrix = np.zeros((n,n))
+        for corner in corners:
+            if board[corner[0]][corner[1]]!=0:
+                stability_matrix[corner[0]][corner[1]] = 1
+        i = 0
+        for edge in edges:
+            print("new edge")
+            temp_list = edge+ [corners[i%4]] +[corners[(i+1)%4]]
+            print(temp_list)
+            full_row = True
+            for square in (temp_list):
+                if board[square[0]][square[1]]==0:
+                    full_row = False
+                    break
+                
+            if full_row:
+                for square in (temp_list):
+                    print("a")
+                    stability_matrix[square[0]][square[1]]=1
+            unchanged = True
+            while unchanged == True:
+                #print("durchlauf")
+                unchanged = False
+                for field in edge:
+                    prev_field = (field[0]-alignment[i][0],field[1]-alignment[i][1])
+                    if stability_matrix[field[0]][field[1]]==0:
+                        if board[prev_field[0]][prev_field[1]]!=0 and board[prev_field[0]][prev_field[1]] == board[field[0]][field[1]]:
+                            if stability_matrix[prev_field[0]][prev_field[1]]==1:
+                                stability_matrix[field[0]][field[1]] = 1
+                                unchanged = True
+                                #print("set to 1")
+                    #print(prev_field)
+                #print("a")
+                for field in edge:
+                    prev_field = (field[0]+alignment[i][0],field[1]+alignment[i][1])
+                    if stability_matrix[field[0]][field[1]]==0:
+                        if board[prev_field[0]][prev_field[1]]!=0 and board[prev_field[0]][prev_field[1]] == board[field[0]][field[1]]:
+                            if stability_matrix[prev_field[0]][prev_field[1]]==1:
+                                stability_matrix[field[0]][field[1]] = 1
+                                unchanged = True
+                                #print("set to 1")
+                #print(prev_field)
+            i +=1
+        return stability_matrix
+
+    def get_stability_value(self,board,player):
+        edge_stability_matrix = self.get_edge_stability_matrix(board,player)
+        stable_coins = board*edge_stability_matrix
+        player_stable_coins = sum(stable_coins[stable_coins==1])
+        opponent_stable_coins = -sum(stable_coins[stable_coins==-1])
+
+        if(player_stable_coins+opponent_stable_coins)!=0:
+            return (player_stable_coins-opponent_stable_coins)/(player_stable_coins+opponent_stable_coins)
+        return 0
+
 
     def get_static_weight_score(self,board,maxplayer):
         if self.n == 8:
@@ -205,6 +283,7 @@ class OthelloGame(Game):
             #return (np.sum(weights*self.get_only_pieces_of_player(board,maxplayer)) + np.sum(weights*self.get_only_pieces_of_player(board,-maxplayer)))/96
 
             # 96 is the maximum difference possible with 48 for player 1 and -48 for player 2
+
 """
     @staticmethod
     def display(board):
