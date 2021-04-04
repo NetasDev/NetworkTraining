@@ -7,6 +7,7 @@ sys.path.insert(0,parentdir)
 from Game import Game
 from othello.OthelloLogic import Board
 import numpy as np
+from time import perf_counter
 
 class OthelloGame(Game):
     square_content = {
@@ -68,8 +69,11 @@ class OthelloGame(Game):
             return 0
         if b.has_legal_moves(-player):
             return 0
-        if b.countDiff(player) > 0:
+        dif = b.countDiff(player)
+        if  dif > 0:
             return 1
+        if dif == 0:
+            return -0.05
         return -1
 
     def getCanonicalForm(self, board, player):
@@ -100,6 +104,7 @@ class OthelloGame(Game):
         return board_s
 
     def getScore(self, board, player):
+
         b = Board(self.n)
         b.pieces = np.copy(board)
         return b.countDiff(player)

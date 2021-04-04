@@ -18,7 +18,8 @@ TK This script is set up to easily use the functions provided by the Project
 """
 TK First an object of the game has to be created and atleast 2 Players of that game in order to play the game.
 """
-game = OthelloGame(6)
+"""
+
 hp = HumanOthelloPlayer(game)
 greed = GreedyOthelloPlayer(game)
 minimax = MinimaxOthelloPlayer(game,4)
@@ -27,6 +28,8 @@ minimax2 = MinimaxOthelloPlayer(game,4,mode=1)
 minimax2.name = "baseMinimax"
 minimax3 = MinimaxOthelloPlayer(game,4,mode=2)
 minimax3.name = "betterFunction"
+"""
+
 """
 TK In Order to create a neural Network player with MCTS a NNetWrapper has to be created and this Wrapper has to load the net 
 from the target folder with the given filename
@@ -62,14 +65,13 @@ This Board shows the current board, the possible moves of the current player und
 #print(arena.player2.name + " : "+ str(player2wins))
 #print("draws : " +str(draws))
 """
-"""
 TK By setting save to a path all games played will by saved in the folder at the given path.   
 Afterwards they can be loaded and shown as a replay
 """
-
+"""
 InBoard = InteractiveBoard.load("./newFolder/testgames2/game0")
 InBoard.show_replay()
-
+"""
 """
 TK There is also the Option to play a tournament between two or more players
 If a save path is set for the tournament,there will be new folders created with the names of the two players
@@ -143,8 +145,87 @@ Inboard = InteractiveBoard.load("./newTry/game6")
 Inboard.show_replay()
 """
 
-network = nn(game)
-folder = "./temp/Othello6x6/LearningRate/001/"
-network.load_checkpoint(folder=folder,filename="best")
+
+
+"""
 args = dotdict({'numMCTSSims': 50, 'cpuct': 1.0})
-bestplayer = NeuralNetworkPlayer(game,network,args,name="best player")
+network01 = nn(game)
+network01.load_checkpoint(folder="./temp/Othello8x8/LearningRate/001/",filename="best")
+neuralplayer1 = NeuralNetworkPlayer(game,network01,args,name="0.1",maxtime=1)
+
+minimax = MinimaxOthelloPlayer(game,20,maxtime=1)
+minimax.name = "valueMatrix"
+
+arena = Arena.Arena(neuralplayer1,minimax,game,tempThreshold=5)
+networkswins, minimaxwins,_ =arena.playGames(10,save="./quicktest4/")
+print(networkswins)
+print(minimaxwins)
+"""
+#########
+"""
+
+game = OthelloGame(8)
+args = dotdict({'numMCTSSims': 50, 'cpuct': 1.0})
+minimax = MinimaxOthelloPlayer(game,3)
+
+network01 = nn(game)
+network01.load_checkpoint(folder='./temp/Othello8x8/MCTS sims/25/',filename="best")
+neuralplayer1 = NeuralNetworkPlayer(game,network01,args,name="MCTS sims 25")
+
+network001 = nn(game)
+network001.load_checkpoint(folder='./temp/Othello8x8/MCTS sims/50/',filename="best")
+neuralplayer2 = NeuralNetworkPlayer(game,network001,args,name="MCTS sims 50")
+
+
+network0001 = nn(game)
+network0001.load_checkpoint(folder='./temp/Othello8x8/MCTS sims/100/',filename="best")
+neuralplayer3 = NeuralNetworkPlayer(game,network0001,args,name="MCTS sims 100")
+
+players = []
+players.append(neuralplayer1)
+players.append(neuralplayer2)
+players.append(neuralplayer3)
+
+Arena.Arena.play_tournament(players,200,game,15,savefolder="./tournament3/Othello8x8/MCTS sims")
+"""
+"""
+InBoard = InteractiveBoard.load("./testgames4/game47")
+InBoard.show_replay()
+"""
+"""
+InBoard = InteractiveBoard.load("./tournament/Othello8x8/Learning rate/lr 0.1 VS lr 0.01/game2")
+print(InBoard.prediction_history)
+
+sum1 = 0
+sum2 = 0
+turn = 0
+for entry in InBoard.prediction_history:
+    if turn%2 == 1:
+        sum1 += entry[2]
+    else:
+        sum2 += entry[2]
+    turn += 1
+print(sum1*2/turn)
+print(sum2*2/turn)
+print(InBoard.action_history)
+InBoard.show_replay()
+"""
+
+
+args = dotdict({'numMCTSSims': 100, 'cpuct': 1.0})
+game = OthelloGame(6)
+network = nn(game)
+network.load_checkpoint(folder='./temp/Othello6x6/Third Model/',filename="best")
+neuralplayer = NeuralNetworkPlayer(game,network,args,name="final model")
+Arena.Arena.play_one_against_many(neuralplayer,"./temp/Othello6x6/Third Model/",100,game,8,savefolder="./previous generations 6x6 2/")
+
+
+"""
+args = dotdict({'numMCTSSims': 50000, 'cpuct': 1.0})
+game = OthelloGame(6)
+network = nn(game)
+network.load_checkpoint(folder='./temp/Othello6x6/Third Model/',filename="best")
+neuralplayer = NeuralNetworkPlayer(game,network,args,name="final model",maxtime=1)
+minimax = MinimaxOthelloPlayer(game,100,mode=0,maxtime=1)
+"""
+

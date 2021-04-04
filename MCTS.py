@@ -1,6 +1,6 @@
 import logging
 import math
-import time
+from time import perf_counter
 
 import numpy as np
 
@@ -26,7 +26,7 @@ class MCTS():
         self.Es = {}  # stores game.getGameEnded ended for board s
         self.Vs = {}  # stores game.getValidMoves for board s
 
-    def getActionProb(self, canonicalBoard, temp=1,time=0):
+    def getActionProb(self, canonicalBoard, temp=1,time=0,details=False):
         """
         This function performs numMCTSSims simulations of MCTS starting from
         canonicalBoard.
@@ -36,12 +36,15 @@ class MCTS():
                    proportional to Nsa[(s,a)]**(1./temp)
         """
         if time != 0:
-            start = time.perf_counter()
-            while time.perf_counter()-start<time:
+            start = perf_counter()
+            simulations = 0
+            while perf_counter()-start<time:
                 self.search(canonicalBoard)
+                simulations += 1
         else:
             for i in range(self.args.numMCTSSims):
                 self.search(canonicalBoard)
+            simulations = self.args.numMCTSSims
 
         s = self.game.stringRepresentation(canonicalBoard)
         counts = [self.Nsa[(s, a)] if (s, a) in self.Nsa else 0 for a in range(self.game.getActionSize())]
@@ -52,11 +55,17 @@ class MCTS():
             bestA = np.random.choice(bestAs)
             probs = [0] * len(counts)
             probs[bestA] = 1
+            if details == True:
+                Qs = [self.Qsa[(s,a)] if (s,a) in self.Qsa else 0 for a in range(self.game.getActionSize())]
+                return probs,Qs,simulations
             return probs
 
         counts = [x ** (1. / temp) for x in counts]
         counts_sum = float(sum(counts))
         probs = [x / counts_sum for x in counts]
+        if details == True:
+            Qs = [self.Qsa[(s,a)] if (s,a) in self.Qsa else 0 for a in range(self.game.getActionSize())]
+            return probs,Qs,simulations
         return probs
 
     def search(self, canonicalBoard):

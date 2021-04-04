@@ -49,7 +49,8 @@ class Arena():
             or
                 draw result returned from the game that is neither 1, -1, nor 0.
         """
-        
+        self.player1.reset()
+        self.player2.reset()
 
         if save!= False:
             InBoard = InteractiveBoard(self.game,self.player1,self.player2)
@@ -60,10 +61,13 @@ class Arena():
         board = self.game.getInitBoard()
         it = 0
         while self.game.getGameEnded(board, curPlayer) == 0:
-            self.player1.reset()
-            self.player2.reset()
+            #self.player1.reset()
+            #self.player2.reset()
             it += 1
-            action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it>=self.tempThreshold)
+            if save == False:
+                action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it>=self.tempThreshold)
+            else:
+                action, value, executions = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it>=self.tempThreshold,details=True)
 
             valids = self.game.getValidMoves(self.game.getCanonicalForm(board, curPlayer), 1)
 
@@ -75,7 +79,8 @@ class Arena():
 
             if save != False:
                 InBoard.board_history.append(board)
-                InBoard.move_history.append((curPlayer*-1,self.game.action_to_move(action)))
+                InBoard.action_history.append((curPlayer*-1,action))
+                InBoard.prediction_history.append((curPlayer*-1,value,executions))
 
         if save != False:
             i = 1
@@ -146,19 +151,6 @@ class Arena():
         draws = np.zeros((len(players),len(players)),dtype=int)
         names = []
 
-        """
-        for i in range(len(players)):
-            names.append(players[i].name)
-            for j in range(len(players)):
-                if i!=j:
-                    if savefolder!= False:
-                        save = savefolder +"/"+ players[i].name +"VS" +players[j].name+"/"
-                    else:
-                        save = False
-                    arena = Arena(players[i],players[j],game,tempThreshold=tempThreshold)
-                    wins[i][j],_,draws[i][j] = arena.playGames(num_matches,save=save)
-        """
-        
         for i in range(0,len(players)):
             print(i)
             names.append(players[i].name)
@@ -166,22 +158,28 @@ class Arena():
             while j<=len(players)-1:
                 arena = Arena(players[i],players[j],game,tempThreshold=tempThreshold)
                 if savefolder!= False:
-                    save = savefolder +"/"+ players[i].name +"VS" +players[j].name+"/"
+                    save = savefolder +"/"+ players[i].name +" VS " +players[j].name+"/"
                 else:
                     save = False
                 wins[i][j],wins[j][i],draws[i][j] = arena.playGames(num_matches,save=save)
+                draws[j][i] = draws[i][j]
                 #print(players[i].name +" played against "+players[j].name + " with " + str(wins[i][j])+" wins and " + str(wins[j][i])+ "losses")
                 j = j+1
 
+        
+        
         print(names)
         df = pd.DataFrame(wins,columns=names,index=names)
         df2 = pd.DataFrame(draws,columns=names,index=names)
 
-        df.to_csv(r""+savefolder+"/wins.csv")
-        df2.to_csv(r""+savefolder+"/draws.csv")
-
         print(df)
         print(df2)
+
+        if savefolder!= False:
+            df.to_csv(r""+savefolder+"/wins.csv")
+            df2.to_csv(r""+savefolder+"/draws.csv")
+
+        
 
         np.savetxt('wins',wins,delimiter = " ")
         np.savetxt('draws',draws,delimiter=" ")
@@ -189,7 +187,7 @@ class Arena():
     @staticmethod
     def play_one_against_many(player,folder,num_matches,game,tempThreshold,savefolder=False):
         #
-        wandb.init(project="6x6 previous iterations")
+        wandb.init(project="8x8 against previous iterations")
         wins=[]
         losses=[]
         draws=[]
@@ -216,7 +214,7 @@ class Arena():
                 losses.append(lossesG)
                 draws.append(drawsG)
                 wandb.log({'Wins':winsG,'Losses':lossesG,'Draws':drawsG,
-                'Winrate':winsG/(winsG+drawsG+lossesG)})
+                'Winrate':winsG/(winsG+drawsG+lossesG),'Winrate including draws':(winsG+0.5*drawsG)/(winsG+drawsG+lossesG)})
                 generation = generation+1
             i = i+1
 
