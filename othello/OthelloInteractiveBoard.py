@@ -35,6 +35,17 @@ class InteractiveBoard():
                 return self.prediction_history[len(self.prediction_history)-i-1][1]
         return None
 
+    def get_predictions_of_player(self,player):
+        prediction_history = []
+        for i in range(len(self.prediction_history)):
+            if self.prediction_history[i][0] == player:
+                prediction_history[i][0] = self.prediction_history[i][1]
+                prediction_history[i][1] = self.prediction_history[i][2]
+        print(prediction_history)
+        return prediction_history
+
+
+
     def get_last_depth(self,player):
         for i in range(len(self.prediction_history)):
             if self.prediction_history[len(self.prediction_history)-i-1][0] == player:

@@ -7,6 +7,8 @@ from othello.OthelloInteractiveBoard import InteractiveBoard
 from othello.OthelloLogic import Board
 from othello.OthelloPlayers import *
 import pygame
+import os
+import wandb
 
 import numpy as np
 from utils import *
@@ -211,21 +213,111 @@ print(InBoard.action_history)
 InBoard.show_replay()
 """
 
-
-args = dotdict({'numMCTSSims': 100, 'cpuct': 1.0})
-game = OthelloGame(6)
+"""
+args = dotdict({'numMCTSSims': 50, 'cpuct': 1.0})
+game = OthelloGame(8)
 network = nn(game)
-network.load_checkpoint(folder='./temp/Othello6x6/Third Model/',filename="best")
+network.load_checkpoint(folder='./temp/Othello8x8/Continued model/',filename="best")
 neuralplayer = NeuralNetworkPlayer(game,network,args,name="final model")
-Arena.Arena.play_one_against_many(neuralplayer,"./temp/Othello6x6/Third Model/",100,game,8,savefolder="./previous generations 6x6 2/")
-
-
+Arena.Arena.play_one_against_many(neuralplayer,"./temp/Othello8x8/Continued model/",100,game,15,savefolder="./previous generations 8x8 continued/")
 """
-args = dotdict({'numMCTSSims': 50000, 'cpuct': 1.0})
+#####generate data
+"""
+args = dotdict({'numMCTSSims': 5000000, 'cpuct': 1.0})
 game = OthelloGame(6)
 network = nn(game)
-network.load_checkpoint(folder='./temp/Othello6x6/Third Model/',filename="best")
-neuralplayer = NeuralNetworkPlayer(game,network,args,name="final model",maxtime=1)
-minimax = MinimaxOthelloPlayer(game,100,mode=0,maxtime=1)
+network.load_checkpoint(folder='./temp/Othello6x6/Continued model/',filename="best")
+neuralplayer = NeuralNetworkPlayer(game,network,args,maxtime=1)
+randomplayer = RandomPlayer(game)
+arena = Arena.Arena(neuralplayer,randomplayer,game,tempThreshold=8)
+wins,losses,draws =arena.playGames(20)
+
+print("wins: "+str(wins))
+print("losses: "+str(losses))
+print("draws: "+str(draws))
 """
+
+
+args = dotdict({'numMCTSSims': 5000000, 'cpuct': 1.0})
+game = OthelloGame(6)
+network = nn(game)
+network.load_checkpoint(folder='./temp/Othello6x6/Continued model/',filename="best")
+neuralplayer = NeuralNetworkPlayer(game,network,args,maxtime=1)
+neuralplayer.name = "neural network"
+minimax = MinimaxOthelloPlayer(game,1000,mode=3,maxtime=1)
+minimax.name ="minimax value matrix"
+arena = Arena.Arena(neuralplayer,minimax,game,tempThreshold=8)
+wins,losses,draws =arena.playGames(400,save="./evaluation_games/6x6vsminimax/matrix/")
+
+print("wins: "+str(wins))
+print("losses: "+str(losses))
+print("draws: "+str(draws))
+
+"""
+Inboard = InteractiveBoard.load("./evaluation_games/6x6vsminimax/simple/game3")
+Inboard.show_replay()
+"""
+######## look at games
+"""
+Inboard = InteractiveBoard.load("./first runsgame1")
+Inboard.show_replay()
+Inboard = InteractiveBoard.load("./first runsgame2")
+Inboard.show_replay()
+Inboard = InteractiveBoard.load("./first runsgame3")
+Inboard.show_replay()
+"""
+
+
+
+########### data analysis
+
+
+#all_mcts_simulations = 0
+#evaluation_mcts = np.zeros((120,3))
+#evaluation_minimax = np.zeros((120,2))
+"""
+
+score_difference = np.zeros((120,2))
+wins,losses,draws = 0,0,0
+
+for i in range(1000):
+    path = "./evaluation_games/8x8vsminimax/simple/game"+str(i)
+    if os.path.isfile(path+".pkl"):
+        Inboard = InteractiveBoard.load(path)
+        neural = 0
+        if Inboard.player1_name == "neural network":
+            neural = 1
+        else:
+            neural = -1
+        for j in range(len(Inboard.board_history)):
+            score_difference[j][0] += Inboard.game.getScore(Inboard.board_history[j],neural)
+            score_difference[j][1] += 1
+        
+        for j in range(len(Inboard.action_history)):
+            if Inboard.prediction_history[j][0]==neural:
+                evaluation_mcts[j][0] +=1
+                evaluation_mcts[j][1] +=Inboard.get_last_prediction()[1]
+                evaluation_mcts[j][2] +=Inboard.prediction_history[j][2]
+
+        a = Inboard.game.getGameEnded(Inboard.board_history[len(Inboard.board_history)-1],neural)
+        if a ==1:
+            wins+=1
+        if a ==-1:
+            losses+=1
+        if a == -0.05:
+            draws += 1
+
+
+print(score_difference)
+print(str(wins) + " "+str(losses)+" "+str(draws))
+
+
+wandb.init(project="evaluation matches")
+
+for j in range(len(score_difference)):
+    if score_difference[j][1]>0:
+        wandb.log({"Average disk difference":score_difference[j][0]/score_difference[j][1],"turn":j})
+"""
+
+
 

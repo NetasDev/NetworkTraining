@@ -10,12 +10,15 @@ class RandomPlayer():
     def __init__(self, game):
         self.game = game
 
-    def play(self, board):
+    def play(self, board,deterministic =True):
         a = np.random.randint(self.game.getActionSize())
         valids = self.game.getValidMoves(board, 1)
         while valids[a]!=1:
             a = np.random.randint(self.game.getActionSize())
         return a
+    
+    def reset(self):
+        return
 
 
 class HumanOthelloPlayer():
@@ -87,12 +90,10 @@ class MinimaxOthelloPlayer():
     def play(self,board,deterministic=True,details = False):
         valids = self.game.getValidMoves(board, 1)
         candidates = []
-        depth = 0
-        if self.depth == 0:
-            print("depth has to be atleast 1")
+        depth_searched = 0
 
         if self.maxtime == 0:
-            depth = self.depth
+            depth_searched = self.depth
             for a in range(self.game.getActionSize()):
                 if valids[a]==0:
                     continue
@@ -113,16 +114,16 @@ class MinimaxOthelloPlayer():
                     temp_candidates += [(score, a)]
                 if perf_counter() < endtime:
                     candidates = temp_candidates
+                    depth_searched = i
                 else:
-                    depth = i-1
+                    depth_searched = i-1
                     break
         
         candidates.sort(reverse=True)
-        print(candidates)
         best_indices = [i for i,x in enumerate(candidates) if x[0]==candidates[0][0]]
         random_best_indice = np.random.choice(best_indices)
         if details == True:
-            return (candidates[random_best_indice][1],candidates[random_best_indice][0],depth)
+            return (candidates[random_best_indice][1],candidates[random_best_indice][0],depth_searched)
         return candidates[random_best_indice][1]
 
 
@@ -135,19 +136,22 @@ class MinimaxOthelloPlayer():
             if perf_counter()>endtime:
                 return 0
         valids = self.game.getValidMoves(board,player)
-        gameEnd = self.game.getGameEnded(board,player)
+        gameEnd = self.game.getGameEnded(board,1)
         if depth == 0 or gameEnd!=0:
+            if gameEnd == 1:
+                return math.inf #win
+            if gameEnd == -1:
+                return -math.inf #loose
+            if gameEnd !=0: #draw
+                return 0
+
             if depth == 0:
                 if self.mode==1:
-                    return self.game.getScore(board,1)
+                    return self.game.get_coin_value(board,1)
                 if self.mode==2:
                     return self.game.get_mobility_score(board,1)+self.game.get_coin_parity(board,1)
                 return self.game.get_static_weight_score(board,1)
-            if gameEnd == 1:
-                return math.inf*player
-            if gameEnd == -1:
-                return -math.inf*player
-            return gameEnd 
+            
         if player == 1:
             score = -math.inf
             for a in range(self.game.getActionSize()):
@@ -180,6 +184,7 @@ class NeuralNetworkPlayer():
         self.mcts = MCTS(game,nnet,args)
         self.name = name
         self.maxtime = maxtime
+
     def reset(self):
         self.mcts = self.mctsStart
 

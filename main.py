@@ -21,9 +21,9 @@ args = dotdict({
     'arenaCompare': 40,         # Number of games to play during arena play to determine if new net will be accepted.
     'cpuct': 1,
 
-    'checkpoint': './temp/Othello8x8/First model',
-    'load_model': False,
-    'load_folder_file': ('./temp/Othello6x6/First Model/','checkpoint_21'),
+    'checkpoint': './temp/Othello8x8/Continued model',
+    'load_model': True,
+    'load_folder_file': ('./temp/Othello8x8/First model/','checkpoint_14'),
     'numItersForTrainExamplesHistory': 10,
     'maxtime': 43200,
 
@@ -48,7 +48,7 @@ def main():
 
     if args.load_model:
         log.info("Loading 'trainExamples' from file...")
-        #c.loadTrainExamples()
+        c.loadTrainExamples()
 
 
     run = wandb.init(project=args.wandb_project,config=args,reinit=True)

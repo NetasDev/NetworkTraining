@@ -110,12 +110,17 @@ class OthelloGame(Game):
         return b.countDiff(player)
 
     def action_to_move(self,action):
+        if action == None:
+            return None
         if int(action/self.n)>=self.n:
             return "skip"
         move = (chr(97+int(action/self.n)), action%self.n)
         return move
 
 ######################################################################################################
+    def get_only_pieces_of_player(self,board,maxplayer):
+        print(board[board == maxplayer])
+
     def get_better_value(self,player,board):
         max_player_moves = self.get_legal_moves(board,player)
         min_player_moves = self.get_legal_moves(board,-player)
@@ -197,8 +202,9 @@ class OthelloGame(Game):
                                 [ 2,-1, 1, 0, 0, 1,-1, 2],
                                 [-3,-4,-1,-1,-1,-1,-4,-3],  
                                 [ 4,-3, 2, 2, 2, 2,-3, 4]))
-            #return (np.sum(weights*self.get_only_pieces_of_player(board,maxplayer)) + np.sum(weights*self.get_only_pieces_of_player(board,-maxplayer)))/112
-            return sum(board*weights) / 112
+            if maxplayer==1:
+                return np.sum(weights*board)/112
+            return -np.sum(weights*board)/112
             # 112 is the maximum difference possible with 56 for player 1 and -56 for player 2
         if self.n == 6:
             weights = np.array(([ 5,-3, 3, 3,-3, 5],
@@ -207,7 +213,9 @@ class OthelloGame(Game):
                                 [ 3,-1, 1, 1,-1, 3],
                                 [-3,-4,-1,-1,-4,-3],  
                                 [ 5,-3, 3, 3,-3, 5]))
-            #return (np.sum(weights*self.get_only_pieces_of_player(board,maxplayer)) + np.sum(weights*self.get_only_pieces_of_player(board,-maxplayer)))/96
+            if maxplayer==1:
+                return np.sum(weights*board)/96
+            return -np.sum(weights*board)/96
 
             # 96 is the maximum difference possible with 48 for player 1 and -48 for player 2
 """
