@@ -121,6 +121,26 @@ class MinimaxOthelloPlayer():
         
         candidates.sort(reverse=True)
         best_indices = [i for i,x in enumerate(candidates) if x[0]==candidates[0][0]]
+        
+        if deterministic == False:
+            total, i = 0,0
+            for candidate in candidates:
+                if candidate[0]>0:
+                    total += candidate[0]
+                else:
+                    break
+                i = i+1
+            if i != 0:
+                chances  = []
+                for j in range(i):
+                    chances.append(candidates[j][0]/total)
+                random_indice = np.random.choice(range(i),p=chances)
+
+                if details == True:
+                    return (candidates[random_indice][1],candidates[random_indice][0],depth_searched)
+                return candidates[random_indice][1]
+
+
         random_best_indice = np.random.choice(best_indices)
         if details == True:
             return (candidates[random_best_indice][1],candidates[random_best_indice][0],depth_searched)
