@@ -149,7 +149,7 @@ class MinimaxOthelloPlayer():
                 if self.mode==1:
                     return self.game.get_coin_value(board,1)
                 if self.mode==2:
-                    return self.game.get_mobility_score(board,1)+self.game.get_coin_parity(board,1)
+                    return self.game.get_better_value(board,1)
                 return self.game.get_static_weight_score(board,1)
             
         if player == 1:
