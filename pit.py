@@ -239,15 +239,15 @@ print("draws: "+str(draws))
 
 
 args = dotdict({'numMCTSSims': 5000000, 'cpuct': 1.0})
-game = OthelloGame(6)
+game = OthelloGame(8)
 network = nn(game)
-network.load_checkpoint(folder='./temp/Othello6x6/Continued model/',filename="best")
+network.load_checkpoint(folder='./temp/Othello8x8/Continued model/',filename="best")
 neuralplayer = NeuralNetworkPlayer(game,network,args,maxtime=1)
 neuralplayer.name = "neural network"
-minimax = MinimaxOthelloPlayer(game,1000,mode=2,maxtime=1)
-minimax.name ="minimax combined value"
+minimax = MinimaxOthelloPlayer(game,1000,mode=1,maxtime=1)
+minimax.name ="minimax value matrix"
 arena = Arena.Arena(neuralplayer,minimax,game,tempThreshold=8)
-wins,losses,draws =arena.playGames(400,save="./evaluation_games/6x6vsminimax/combined value/")
+wins,losses,draws =arena.playGames(400,save="./evaluation_games/8x8vsminimax/coin value with deter/")
 
 print("wins: "+str(wins))
 print("losses: "+str(losses))
