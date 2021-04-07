@@ -2,7 +2,6 @@
 .DS_Store
 
 /temp/
-/trained network/
 /wandb/
 /.project
 /.pydevproject
