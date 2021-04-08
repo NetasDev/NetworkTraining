@@ -217,9 +217,7 @@ class OthelloGame(Game):
                 stability_matrix[corner[0]][corner[1]] = 1
         i = 0
         for edge in edges:
-            #print("new edge")
             temp_list = edge+ [corners[i%4]] +[corners[(i+1)%4]]
-            #print(temp_list)
             full_row = True
             for square in (temp_list):
                 if board[square[0]][square[1]]==0:
@@ -228,11 +226,9 @@ class OthelloGame(Game):
                 
             if full_row:
                 for square in (temp_list):
-                    #print("a")
                     stability_matrix[square[0]][square[1]]=1
             unchanged = True
             while unchanged == True:
-                #print("durchlauf")
                 unchanged = False
                 for field in edge:
                     prev_field = (field[0]-alignment[i][0],field[1]-alignment[i][1])
@@ -241,9 +237,6 @@ class OthelloGame(Game):
                             if stability_matrix[prev_field[0]][prev_field[1]]==1:
                                 stability_matrix[field[0]][field[1]] = 1
                                 unchanged = True
-                                #print("set to 1")
-                    #print(prev_field)
-                #print("a")
                 for field in edge:
                     prev_field = (field[0]+alignment[i][0],field[1]+alignment[i][1])
                     if stability_matrix[field[0]][field[1]]==0:
@@ -251,8 +244,6 @@ class OthelloGame(Game):
                             if stability_matrix[prev_field[0]][prev_field[1]]==1:
                                 stability_matrix[field[0]][field[1]] = 1
                                 unchanged = True
-                                #print("set to 1")
-                #print(prev_field)
             i +=1
         return stability_matrix
 

@@ -1,0 +1,2 @@
+/trained[[:space:]]network/ filter=lfs diff=lfs merge=lfs -text
+/trained[[:space:]]network filter=lfs diff=lfs merge=lfs -text
