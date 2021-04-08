@@ -237,7 +237,7 @@ print("losses: "+str(losses))
 print("draws: "+str(draws))
 """
 
-
+"""
 args = dotdict({'numMCTSSims': 5000000, 'cpuct': 1.0})
 game = OthelloGame(6)
 network = nn(game)
@@ -252,14 +252,14 @@ wins,losses,draws =arena.playGames(400,save="./evaluation_games/6x6vsminimax/mat
 print("wins: "+str(wins))
 print("losses: "+str(losses))
 print("draws: "+str(draws))
-
+"""
 """
 Inboard = InteractiveBoard.load("./evaluation_games/6x6vsminimax/simple/game3")
 Inboard.show_replay()
 """
 ######## look at games
 """
-Inboard = InteractiveBoard.load("./first runsgame1")
+Inboard = InteractiveBoard.load("./evaluation_games/")
 Inboard.show_replay()
 Inboard = InteractiveBoard.load("./first runsgame2")
 Inboard.show_replay()
@@ -267,8 +267,29 @@ Inboard = InteractiveBoard.load("./first runsgame3")
 Inboard.show_replay()
 """
 
+game = OthelloGame(6)
+minimax = MinimaxOthelloPlayer(game,10,mode=2,maxtime=1)
+minimax.name = "better evaluation"
+minimax2 = MinimaxOthelloPlayer(game,10,mode=3,maxtime=1)
+arena = Arena.Arena(minimax,minimax2,game,tempThreshold=8)
+wins,losses,draws =arena.playGames(20,save="./temporary3/")
+print(str(wins)+" "+str(losses)+" "+str(draws))
 
+"""
+game = OthelloGame(6)
+hp = HumanOthelloPlayer(game)
+arena = Arena.Arena(hp,hp,game)
+arena.playGames(10,Interactive=True)
+"""
 
+"""
+Inboard = InteractiveBoard.load("./temporary2/game1")
+Inboard.show_replay()
+Inboard = InteractiveBoard.load("./temporary2/game2")
+Inboard.show_replay()
+Inboard = InteractiveBoard.load("./temporary2/game3")
+Inboard.show_replay()
+"""
 ########### data analysis
 
 

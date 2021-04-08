@@ -156,7 +156,7 @@ class InteractiveBoard():
                             if moves[i]==1 and self.game.action_to_move(i)==(chr(97+col),row):
                                 self.board, self.player_to_move = self.game.getNextState(self.board,self.player_to_move,i)
                                 self.board_history.append(self.board)
-                                self.action_history.append((self.player_to_move*-1,self.game.move_to_action((col,row))))
+                                self.action_history.append((self.player_to_move*-1,i))
 
             if not self.human_players_turn():
                 if self.player_to_move ==1:
