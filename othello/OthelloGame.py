@@ -113,8 +113,8 @@ class OthelloGame(Game):
         if action == None:
             return None
         if int(action/self.n)>=self.n:
-            return "skip"
-        move = (chr(97+int(action/self.n)), action%self.n)
+            return (self.n,0)
+        move = (int(action/self.n), action%self.n)
         return move
 
 ######################################################################################################
@@ -169,15 +169,22 @@ class OthelloGame(Game):
         oamv = len(opponent_moves[opponent_moves==1])
 
         empty_neighbours = []
-        for pos in np.argwhere(board==-player):
-            empty_neighbours += self.get_empty_neighbours(board,pos)
-            unique_empty_neighbours = set(empty_neighbours)
-        ppmv = len(unique_empty_neighbours)
+        if len(np.argwhere(board==-player))==0:
+            ppmv = 0
+        else:
+            for pos in np.argwhere(board==-player):
+                empty_neighbours += self.get_empty_neighbours(board,pos)
+                unique_empty_neighbours = set(empty_neighbours)
+            ppmv = len(unique_empty_neighbours)
+        
         empty_neighbours = []
-        for pos in np.argwhere(board==player):
-            empty_neighbours += self.get_empty_neighbours(board,pos)
-            unique_empty_neighbours = set(empty_neighbours)
-        opmv = len(unique_empty_neighbours)
+        if len(np.argwhere(board==player))==0:
+            opmv = 0
+        else:
+            for pos in np.argwhere(board==player):
+                empty_neighbours += self.get_empty_neighbours(board,pos)
+                unique_empty_neighbours = set(empty_neighbours)
+            opmv = len(unique_empty_neighbours)
     
         if  ((pamv +0.5*ppmv) + (oamv +0.5*opmv))!=0:
             value = ((pamv +0.5*ppmv) - (oamv +0.5*opmv)) / ((pamv +0.5*ppmv) + (oamv +0.5*opmv))

@@ -272,7 +272,7 @@ Inboard.show_replay()
 Inboard = InteractiveBoard.load("./first runsgame3")
 Inboard.show_replay()
 """
-
+"""
 game = OthelloGame(6)
 minimax = MinimaxOthelloPlayer(game,10,mode=2,maxtime=1)
 minimax.name = "better evaluation"
@@ -280,38 +280,47 @@ minimax2 = MinimaxOthelloPlayer(game,10,mode=3,maxtime=1)
 arena = Arena.Arena(minimax,minimax2,game,tempThreshold=8)
 wins,losses,draws =arena.playGames(20,save="./temporary3/")
 print(str(wins)+" "+str(losses)+" "+str(draws))
-
+"""
 """
 game = OthelloGame(6)
 hp = HumanOthelloPlayer(game)
 arena = Arena.Arena(hp,hp,game)
 arena.playGames(10,Interactive=True)
 """
+"""
+i = 1
+while(True):
+    
+    Inboard = InteractiveBoard.load("./evaluation_games/8x8vsminimax/value matrix with deter/game"+str(i))
+    Inboard.show_replay()
+    i = i+1
+"""
 
-"""
-Inboard = InteractiveBoard.load("./temporary2/game1")
-Inboard.show_replay()
-Inboard = InteractiveBoard.load("./temporary2/game2")
-Inboard.show_replay()
-Inboard = InteractiveBoard.load("./temporary2/game3")
-Inboard.show_replay()
-"""
 ########### data analysis
 
 
-#all_mcts_simulations = 0
-#evaluation_mcts = np.zeros((120,3))
-#evaluation_minimax = np.zeros((120,2))
-"""
+all_mcts_simulations = 0
+evaluation_mcts = np.zeros((140,3))
+evaluation_minimax = np.zeros((140,3))
 
-score_difference = np.zeros((120,2))
+average_board_value = np.zeros((140,4))
+
+score_difference = np.zeros((140,2))
 wins,losses,draws = 0,0,0
 
+heatmap_neural = np.zeros((8,8))
+
 for i in range(1000):
-    path = "./evaluation_games/8x8vsminimax/simple/game"+str(i)
+    path = "./evaluation_games/8x8vsminimax/value matrix with deter/game"+str(i)
+    path2 = "./evaluation_games/8x8vsminimax/coin value with deter/game"+str(i)
+    path3 =  "./evaluation_games/8x8vsminimax/combined value with deter/game"+str(i)
+
     if os.path.isfile(path+".pkl"):
         Inboard = InteractiveBoard.load(path)
+        Inboard2 = InteractiveBoard.load(path2)
+        Inboard3 = InteractiveBoard.load(path3)
         neural = 0
+
         if Inboard.player1_name == "neural network":
             neural = 1
         else:
@@ -319,12 +328,47 @@ for i in range(1000):
         for j in range(len(Inboard.board_history)):
             score_difference[j][0] += Inboard.game.getScore(Inboard.board_history[j],neural)
             score_difference[j][1] += 1
+            average_board_value[j][0]+= Inboard.game.get_coin_value(Inboard.board_history[j],neural)
+            average_board_value[j][1]+= Inboard.game.get_corner_value(Inboard.board_history[j],neural,Inboard.game.getValidMoves(Inboard.board_history[j],neural),Inboard.game.getValidMoves(Inboard.board_history[j],-neural))
+            average_board_value[j][2]+= Inboard.game.get_mobility_value(Inboard.board_history[j],neural,Inboard.game.getValidMoves(Inboard.board_history[j],neural),Inboard.game.getValidMoves(Inboard.board_history[j],-neural))
+            average_board_value[j][3]+= Inboard.game.get_stability_value(Inboard.board_history[j],neural)
+
         
         for j in range(len(Inboard.action_history)):
+            if Inboard.action_history[j][0]==neural:
+                move = Inboard.game.action_to_move(Inboard.action_history[j][1])
+                if move[0] != Inboard.game.n:
+                    heatmap_neural[move[0]][move[1]]+=1
+
             if Inboard.prediction_history[j][0]==neural:
-                evaluation_mcts[j][0] +=1
-                evaluation_mcts[j][1] +=Inboard.get_last_prediction()[1]
-                evaluation_mcts[j][2] +=Inboard.prediction_history[j][2]
+                evaluation_mcts[j+1][0] += 1
+                evaluation_mcts[j+1][1] +=Inboard.prediction_history[j][1]
+                evaluation_mcts[j+1][2] +=Inboard.prediction_history[j][2]
+            if Inboard.prediction_history[j][0]==-neural:
+                evaluation_minimax[j+1][0] += 1
+                if Inboard.prediction_history[j][1] == math.inf:
+                    evaluation_minimax[j+1][1] += 1
+                elif Inboard.prediction_history[j][1] == -math.inf:
+                    evaluation_minimax[j+1][1] += -1
+                else:
+                    evaluation_minimax[j+1][1] +=Inboard.prediction_history[j][1]
+                       
+
+                if Inboard.prediction_history[j][2]<10:
+                    evaluation_minimax[j+1][2] +=Inboard.prediction_history[j][2]
+                else:
+                    evaluation_minimax[j+1][2] += 10
+
+        for j in range(len(Inboard2.action_history)):
+            if Inboard2.action_history[j][0]==neural:
+                move = Inboard2.game.action_to_move(Inboard2.action_history[j][1])
+                if move[0] != Inboard2.game.n:
+                    heatmap_neural[move[0]][move[1]]+=1
+        for j in range(len(Inboard3.action_history)):
+            if Inboard3.action_history[j][0]==neural:
+                move = Inboard3.game.action_to_move(Inboard3.action_history[j][1])
+                if move[0] != Inboard3.game.n:
+                    heatmap_neural[move[0]][move[1]]+=1
 
         a = Inboard.game.getGameEnded(Inboard.board_history[len(Inboard.board_history)-1],neural)
         if a ==1:
@@ -335,15 +379,34 @@ for i in range(1000):
             draws += 1
 
 
-print(score_difference)
+import seaborn as sns
+sns.set_theme()
+ax = sns.heatmap(heatmap_neural)
+ax.figure.savefig("output.png")
+
+
+print(evaluation_mcts)
 print(str(wins) + " "+str(losses)+" "+str(draws))
 
+"""
 
-wandb.init(project="evaluation matches")
+wandb.init(project="final evaluation")
 
 for j in range(len(score_difference)):
     if score_difference[j][1]>0:
-        wandb.log({"Average disk difference":score_difference[j][0]/score_difference[j][1],"turn":j})
+        if evaluation_mcts[j][0]>0 and evaluation_minimax[j][0]>0:
+            wandb.log({"Average disk difference":score_difference[j][0]/score_difference[j][1],"turn":j,
+                        "Neural prediction":evaluation_mcts[j][1]/evaluation_mcts[j][0],     
+                        "MCTS sims":evaluation_mcts[j][2]/evaluation_mcts[j][0],
+                        "Minimax prediction":evaluation_minimax[j][1]/evaluation_minimax[j][0],
+                        "Depth searched":evaluation_minimax[j][2]/evaluation_minimax[j][0],
+                        "Disc value":average_board_value[j][0]/score_difference[j][1],
+                        "Corner value":average_board_value[j][1]/score_difference[j][1],
+                        "Mobility value":average_board_value[j][2]/score_difference[j][1],
+                        "stability value":average_board_value[j][3]/score_difference[j][1]})
+
+#evaluation_mcts[j]/(score_difference[j][1]/2)
+#evaluation_mcts[j]/(score_difference[j][1]/2)
 """
 
 

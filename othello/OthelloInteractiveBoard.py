@@ -13,7 +13,7 @@ class InteractiveBoard():
         self.game = game
         self.player_to_move = 1
         self.size = self.game.n
-        self.side_screen_size = 400
+        self.side_screen_size = 500
         self.screen_size = 1000
         self.square_size = 1000/self.size
         self.space = self.square_size/12
@@ -75,24 +75,35 @@ class InteractiveBoard():
     def draw_side_board(self,screen):
         Game_Font = pygame.freetype.Font(None,24)
         pygame.draw.rect(screen,(255,255,255),(self.screen_size,0,self.side_screen_size,self.screen_size))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,150),"Player 1:",(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,200),self.player1_name,(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,250),"Last Move:",(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,250),str(self.game.action_to_move(self.get_last_action(1))),(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,300),"Score:",(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+100,300),str(self.game.getScore(self.board,1)),(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+100,350),str(self.get_last_prediction(1))[:6],(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+100,400),str(self.get_last_depth(1)),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,150),"Black:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,200),self.player1_name,(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,250),"Last Move:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size+150,250),str(self.game.action_to_move(self.get_last_action(1))),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,300),"Score:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size+100,300),str(self.game.getScore(self.board,1)),(0,0,0))
+    
+        if self.get_last_prediction(1)!=None:
+            Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,350),"Action value:",(0,0,0))
+            Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size+180,350),str(self.get_last_prediction(1))[:6],(0,0,0))
+            Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,400),"Depth/MCTS sims:",(0,0,0))
+            Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size+230,400),str(self.get_last_depth(1)),(0,0,0))
+
+        
 
 
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,550),"Player 2:",(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,600),self.player2_name,(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,650),"Last Move:",(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,650),str(self.game.action_to_move(self.get_last_action(-1))),(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size,700),"Score:",(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,700),str(self.game.getScore(self.board,-1)),(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+150,750),str(self.get_last_prediction(-1))[:8],(0,0,0))
-        Game_Font.render_to(screen,(self.screen_size+1/4*self.side_screen_size+100,800),str(self.get_last_depth(-1)),(0,0,0))
+
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,550),"White:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,600),self.player2_name,(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,650),"Last Move:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size+150,650),str(self.game.action_to_move(self.get_last_action(-1))),(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,700),"Score:",(0,0,0))
+        Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size+150,700),str(self.game.getScore(self.board,-1)),(0,0,0))
+
+        if self.get_last_prediction(-1)!=None:
+            Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,750),"Action value:",(0,0,0))
+            Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size+180,750),str(self.get_last_prediction(-1))[:6],(0,0,0))
+            Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size,800),"Depth/MCTS sims:",(0,0,0))
+            Game_Font.render_to(screen,(self.screen_size+1/5*self.side_screen_size+230,800),str(self.get_last_depth(-1)),(0,0,0))
         
 
     def draw_board(self,screen):
@@ -199,8 +210,8 @@ class InteractiveBoard():
         #FPS = 60
         run = True
         screen = pygame.display.set_mode((self.screen_size+self.side_screen_size,self.screen_size))
+        """+self.side_screen_size,self.screen_size"""
         while run:
-            #clock.tick(FPS)
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -215,6 +226,9 @@ class InteractiveBoard():
                         if self.move < len(self.board_history)-1:
                             self.move = self.move +1
                             self.player_to_move *= -1
+                    if event.key == pygame.K_1:
+                        print("hello")
+                        pygame.image.save(screen,"testfile.jpg")
                     
             self.board = self.board_history[self.move]
             self.action_history = move_his[:self.move]
@@ -224,6 +238,7 @@ class InteractiveBoard():
             self.draw_side_board(screen)
             self.draw_board(screen)
             pygame.display.update()
+            print(self.move)
         pygame.quit()
 
             
