@@ -244,10 +244,10 @@ network = nn(game)
 network.load_checkpoint(folder='./temp/Othello8x8/Continued model/',filename="best")
 neuralplayer = NeuralNetworkPlayer(game,network,args,maxtime=1)
 neuralplayer.name = "neural network"
-minimax = MinimaxOthelloPlayer(game,1000,mode=1,maxtime=1)
+minimax = MinimaxOthelloPlayer(game,1000,mode=2,maxtime=1)
 minimax.name ="minimax value matrix"
-arena = Arena.Arena(neuralplayer,minimax,game,tempThreshold=8)
-wins,losses,draws =arena.playGames(400,save="./evaluation_games/8x8vsminimax/coin value with deter/")
+arena = Arena.Arena(neuralplayer,minimax,game,tempThreshold=15)
+wins,losses,draws =arena.playGames(400,save="./evaluation_games/8x8vsminimax/combined with deter fixed/")
 
 print("wins: "+str(wins))
 print("losses: "+str(losses))
