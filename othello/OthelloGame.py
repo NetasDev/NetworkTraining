@@ -117,16 +117,21 @@ class OthelloGame(Game):
         move = (chr(97+int(action/self.n)), action%self.n)
         return move
 
+    def move_to_action(self,move):
+        action = self.n*move[0]+move[1]
+        return action
+
+
 ######################################################################################################
     def get_better_value(self,board,player):
         player_moves = self.getValidMoves(board,player)
         opponent_moves = self.getValidMoves(board,-player)
-        
+
+        start_time = perf_counter()
         vcoin = self.get_coin_value(board,player)
         vmob  = self.get_mobility_value(board,player,player_moves,opponent_moves)
         vcorner = self.get_corner_value(board,player,player_moves,opponent_moves)
         vstability = self.get_stability_value(board,player)
-
         #print("coin: "+str(vcoin)+" mobility: "+str(vmob)+ " corner: "+ str(vcorner) + " stability: "+ str(vstability))
 
         return 0.25*vcoin+0.25*vmob+0.25*vcorner+0.25*vstability
@@ -137,7 +142,7 @@ class OthelloGame(Game):
         for x,y in corner_squares:
             if board[x][y]==player:
                 score += 1
-            if (x,y) in legalMoves:
+            if legalMoves[self.move_to_action((x,y))] == 1:
                 score += 0.5
         return score
 
@@ -169,16 +174,21 @@ class OthelloGame(Game):
         oamv = len(opponent_moves[opponent_moves==1])
 
         empty_neighbours = []
-        for pos in np.argwhere(board==-player):
-            empty_neighbours += self.get_empty_neighbours(board,pos)
-            unique_empty_neighbours = set(empty_neighbours)
-        ppmv = len(unique_empty_neighbours)
+        if len(np.argwhere(board==-player))>0:
+            for pos in np.argwhere(board==-player):
+                empty_neighbours += self.get_empty_neighbours(board,pos)
+                unique_empty_neighbours = set(empty_neighbours)
+            ppmv = len(unique_empty_neighbours)
+        else:
+            ppmv = 0
         empty_neighbours = []
-        for pos in np.argwhere(board==player):
-            empty_neighbours += self.get_empty_neighbours(board,pos)
-            unique_empty_neighbours = set(empty_neighbours)
-        opmv = len(unique_empty_neighbours)
-    
+        if len(np.argwhere(board==player))>0:
+            for pos in np.argwhere(board==player):
+                empty_neighbours += self.get_empty_neighbours(board,pos)
+                unique_empty_neighbours = set(empty_neighbours)
+            opmv = len(unique_empty_neighbours)
+        else:
+            opmv = 0
         if  ((pamv +0.5*ppmv) + (oamv +0.5*opmv))!=0:
             value = ((pamv +0.5*ppmv) - (oamv +0.5*opmv)) / ((pamv +0.5*ppmv) + (oamv +0.5*opmv))
         else:
@@ -186,13 +196,27 @@ class OthelloGame(Game):
         return value
 
     def get_empty_neighbours(self,board,position):
+        i = position[0]
+        j = position[1]
         empty_neighbours = []
+        for x in range(max(0,i-1),min(i+2,self.n)):
+            for y in range(max(0,j-1),min(j+2,self.n)):
+                if (x != i or y !=j):
+                    #print(x)
+                    #print(y)
+                    if board[x][y]==0:
+                        empty_neighbours.append((x,y))
+        """
+        (x = max(0,self.n-1); x<=min(i+1,self.n);x+=1):
+
+
         for i in range(-1,2):
             for j in range(-1,2):
                 if not(i==position[0] and j ==position[1]):
                     if position[0]+i>=0 and position[0]+i<self.n and position[1]+j>=0 and position[1]+j<self.n:
                         if board[position[0]+i][position[1]+j] == 0:
                             empty_neighbours.append(((position[0]+i),(position[1]+j)))
+        """
         return empty_neighbours
 
             
@@ -250,8 +274,8 @@ class OthelloGame(Game):
     def get_stability_value(self,board,player):
         edge_stability_matrix = self.get_edge_stability_matrix(board,player)
         stable_coins = board*edge_stability_matrix
-        player_stable_coins = sum(stable_coins[stable_coins==1])
-        opponent_stable_coins = -sum(stable_coins[stable_coins==-1])
+        player_stable_coins = sum(stable_coins[stable_coins==player])
+        opponent_stable_coins = -sum(stable_coins[stable_coins==-player])
 
         if(player_stable_coins+opponent_stable_coins)!=0:
             return (player_stable_coins-opponent_stable_coins)/(player_stable_coins+opponent_stable_coins)

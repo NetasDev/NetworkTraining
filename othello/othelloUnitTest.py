@@ -206,34 +206,52 @@ class TestStringMethods(unittest.TestCase):
 
         test_board_2 =np.array(([ 0, 0, 0, 0, 0, 0, 0, 0],
                                 [ 0, 0, 0, 0, 0, 0, 0, 0],
-                                [ 0, 0, 0, 1, 1, 0, 0, 0],
+                                [ 0, 0, 0,-1, 1, 0, 0, 0],
                                 [ 0, 0, 0, 1, 1, 1, 0, 0],
-                                [ 0, 0, 0, 1, 1, 0, 0, 0],
                                 [ 0, 0, 0, 1, 1, 1, 0, 0],
-                                [ 0, 0, 0, 0, 0, 0, 0, 0],
-                                [ 0, 0, 0, 0, 0, 0, 0, 0]))
+                                [ 0, 0, 0, 1, 1, 1, 1, 0],
+                                [ 0, 0, 0, 0, 0, 0, 1, 1],
+                                [ 0, 0, 0, 0, 0, 0, 1, 1]))
 
         test_board_3 =np.array(([ 0, 0, 0, 0, 0, 0, 0, 0],
                                 [ 0, 0, 0, 0, 0, 0, 0, 0],
-                                [ 0, 0, 0, 1, 1, 0, 0, 0],
+                                [ 0, 0, 0, 1, 1, 0, 0, 1],
                                 [ 0, 0, 0, 1, 1, 1, 0,-1],
                                 [ 0, 0, 0, 1, 1, 0, 1,-1],
                                 [ 0, 0, 0, 1, 1, 1, 1,-1],
-                                [ 0, 0, 0, 0, 0, 0, 0, 0],
+                                [ 0, 0, 0, 0, 0, 0, 0,-1],
                                 [ 0, 0, 0, 0, 0, 0, 0, 0]))
-        
-        
-        v = -4/15
-        self.assertEqual(game.get_mobility_value(test_board_1,1,game.getValidMoves(test_board_1,1),game.getValidMoves(test_board_1,-1)), v)
+
+        self.assertEqual(game.get_mobility_value(test_board_1,1,game.getValidMoves(test_board_1,1),game.getValidMoves(test_board_1,-1)), -4/15)
+        self.assertEqual(game.get_mobility_value(test_board_1,-1,game.getValidMoves(test_board_1,-1),game.getValidMoves(test_board_1,1)), 4/15)
+        self.assertEqual(game.get_mobility_value(test_board_2,1,game.getValidMoves(test_board_2,1),game.getValidMoves(test_board_2,-1)), -5.5/16.5)
+        self.assertEqual(game.get_mobility_value(test_board_2,-1,game.getValidMoves(test_board_2,-1),game.getValidMoves(test_board_2,1)), 5.5/16.5)
+        self.assertEqual(game.get_mobility_value(test_board_3,1,game.getValidMoves(test_board_3,1),game.getValidMoves(test_board_3,-1)), -12/19)
+        self.assertEqual(game.get_mobility_value(test_board_3,-1,game.getValidMoves(test_board_3,-1),game.getValidMoves(test_board_3,1)), 12/19)
+
         self.assertEqual(game.get_coin_value(test_board_1,1),5/7)
         self.assertEqual(game.get_coin_value(test_board_1,-1),-5/7)
-        self.assertEqual(game.get_coin_value(test_board_2,1),1)
+        self.assertEqual(game.get_coin_value(test_board_2,1),14/16)
+        self.assertEqual(game.get_coin_value(test_board_2,-1),-14/16)
+        self.assertEqual(game.get_coin_value(test_board_3,1),9/17)
+        self.assertEqual(game.get_coin_value(test_board_3,-1),-9/17)
+
         self.assertEqual(game.get_static_weight_score(test_board_1,1),4/112)
         self.assertEqual(game.get_static_weight_score(test_board_1,-1),-4/112)
-        self.assertEqual(game.get_static_weight_score(test_board_2,1),5/112)
-        self.assertEqual(game.get_static_weight_score(test_board_2,-1),-5/112)
-        self.assertEqual(game.get_static_weight_score(test_board_3,1),-3/112)
-        self.assertEqual(game.get_static_weight_score(test_board_3,-1),3/112)
+        self.assertEqual(game.get_static_weight_score(test_board_2,1),-2/112)
+        self.assertEqual(game.get_static_weight_score(test_board_2,-1),2/112)
+        self.assertEqual(game.get_static_weight_score(test_board_3,1),2/112)
+        self.assertEqual(game.get_static_weight_score(test_board_3,-1),-2/112)
+        
+
+        self.assertEqual(game.get_corner_value(test_board_1,1,game.getValidMoves(test_board_1,1),game.getValidMoves(test_board_1,-1)),0)
+        self.assertEqual(game.get_corner_value(test_board_1,-1,game.getValidMoves(test_board_1,-1),game.getValidMoves(test_board_1,1)),0)
+        self.assertEqual(game.get_corner_value(test_board_2,1,game.getValidMoves(test_board_2,1),game.getValidMoves(test_board_2,-1)),1)
+        self.assertEqual(game.get_corner_value(test_board_2,-1,game.getValidMoves(test_board_2,-1),game.getValidMoves(test_board_2,1)),-1)
+        self.assertEqual(game.get_corner_value(test_board_3,1,game.getValidMoves(test_board_3,1),game.getValidMoves(test_board_3,-1)),1)
+        self.assertEqual(game.get_corner_value(test_board_3,-1,game.getValidMoves(test_board_3,-1),game.getValidMoves(test_board_3,1)),-1)
+
+
         
     def test_value_functions_6x6(self):
         game = OthelloGame(6)
@@ -244,31 +262,47 @@ class TestStringMethods(unittest.TestCase):
                                 [ 0, 0, 0, 0, 0, 0],
                                 [ 0, 0, 0, 0, 0, 0]))
 
-        test_board_2 =np.array(([ 0, 0, 0, 0, 0, 0],
-                                [ 0, 0, 1, 1, 0, 0],
+        test_board_2 =np.array(([-1,-1, 0, 0, 0, 0],
+                                [ 0, 1, 1, 1, 0, 0],
                                 [ 0, 0, 1, 1,-1, 0],
                                 [ 0, 0, 1,-1, 1, 0],
                                 [ 0, 0, 0,-1, 0, 0],
                                 [ 0, 0, 0, 0, 0, 0]))
 
         test_board_3 =np.array(([ 1,-1, 0, 0, 0, 0],
-                                [ 0, 1, 1, 1, 0, 0],
+                                [ 0, 1, 1, 1, 0, 1],
                                 [ 0, 0, 1, 1,-1,-1],
                                 [ 0, 0, 1, 1, 1,-1],
                                 [ 0, 0, 0,-1,-1,-1],
                                 [ 0, 0, 0,-1,-1,-1]))
         
-        
-        self.assertEqual(game.get_mobility_value(test_board_1,1,game.getValidMoves(test_board_1,1),game.getValidMoves(test_board_1,-1)), -4/15)
         self.assertEqual(game.get_coin_value(test_board_1,1),5/7)
         self.assertEqual(game.get_coin_value(test_board_1,-1),-5/7)
-        self.assertEqual(game.get_coin_value(test_board_2,1),3/9)
+        self.assertEqual(game.get_coin_value(test_board_2,1),2/12)
+        self.assertEqual(game.get_coin_value(test_board_2,-1),-2/12)
+        self.assertEqual(game.get_coin_value(test_board_3,1),0/11)
+        self.assertEqual(game.get_coin_value(test_board_3,-1),0/11)
+
+        self.assertEqual(game.get_stability_value(test_board_1,1),0)
+        self.assertEqual(game.get_stability_value(test_board_1,-1),0)
+        self.assertEqual(game.get_stability_value(test_board_2,1),-1)
+        self.assertEqual(game.get_stability_value(test_board_2,-1),1)
+        self.assertEqual(game.get_stability_value(test_board_3,1),-5/7)
+        self.assertEqual(game.get_stability_value(test_board_3,-1),5/7)
+
+        self.assertEqual(game.get_corner_value(test_board_1,1,game.getValidMoves(test_board_1,1),game.getValidMoves(test_board_1,-1)),0)
+        self.assertEqual(game.get_corner_value(test_board_1,-1,game.getValidMoves(test_board_1,-1),game.getValidMoves(test_board_1,1)),0)
+        self.assertEqual(game.get_corner_value(test_board_2,1,game.getValidMoves(test_board_2,1),game.getValidMoves(test_board_2,-1)),-1)
+        self.assertEqual(game.get_corner_value(test_board_2,-1,game.getValidMoves(test_board_2,-1),game.getValidMoves(test_board_2,1)),1)
+        self.assertEqual(game.get_corner_value(test_board_3,1,game.getValidMoves(test_board_3,1),game.getValidMoves(test_board_3,-1)),-1/5)
+        self.assertEqual(game.get_corner_value(test_board_3,-1,game.getValidMoves(test_board_3,-1),game.getValidMoves(test_board_3,1)),1/5)
+
         self.assertEqual(game.get_static_weight_score(test_board_1,1),3/96)
         self.assertEqual(game.get_static_weight_score(test_board_1,-1),-3/96)
-        self.assertEqual(game.get_static_weight_score(test_board_2,1),1/96)
-        self.assertEqual(game.get_static_weight_score(test_board_2,-1),-1/96)
-        self.assertEqual(game.get_static_weight_score(test_board_3,1),3/96)
-        self.assertEqual(game.get_static_weight_score(test_board_3,-1),-3/96)
+        self.assertEqual(game.get_static_weight_score(test_board_2,1),-5/96)
+        self.assertEqual(game.get_static_weight_score(test_board_2,-1),5/96)
+        self.assertEqual(game.get_static_weight_score(test_board_3,1),0/96)
+        self.assertEqual(game.get_static_weight_score(test_board_3,-1),0/96)
         
 
         
