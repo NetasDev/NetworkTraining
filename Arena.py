@@ -61,8 +61,6 @@ class Arena():
         board = self.game.getInitBoard()
         it = 0
         while self.game.getGameEnded(board, curPlayer) == 0:
-            #self.player1.reset()
-            #self.player2.reset()
             it += 1
             if save == False:
                 action = players[curPlayer + 1].play(self.game.getCanonicalForm(board, curPlayer),it>=self.tempThreshold)
@@ -167,32 +165,21 @@ class Arena():
                 #print(players[i].name +" played against "+players[j].name + " with " + str(wins[i][j])+" wins and " + str(wins[j][i])+ "losses")
                 j = j+1
 
-        
-        
-        print(names)
         df = pd.DataFrame(wins,columns=names,index=names)
         df2 = pd.DataFrame(draws,columns=names,index=names)
-
-        print(df)
-        print(df2)
 
         if savefolder!= False:
             df.to_csv(r""+savefolder+"/wins.csv")
             df2.to_csv(r""+savefolder+"/draws.csv")
 
-        
-
-        np.savetxt('wins',wins,delimiter = " ")
-        np.savetxt('draws',draws,delimiter=" ")
-
     @staticmethod
-    def play_one_against_many(player,folder,num_matches,game,tempThreshold,savefolder=False):
+    def play_previous_generations(player,folder,num_matches,game,tempThreshold,savefolder=False):
         #
         wandb.init(project="8x8 against previous iterations")
         wins=[]
         losses=[]
         draws=[]
-        names = []
+        names =[]
         i = 0
         generation =0
         while i <=70:
@@ -222,11 +209,7 @@ class Arena():
         df = pd.DataFrame(wins,columns=player.name,index=names)
         df2 = pd.DataFrame(wins,columns=player.name,index=names)
 
-        print(df)
-        print(df2)
-
-        np.savetxt('wins',wins,delimiter = " ")
-        np.savetxt('draws',draws,delimiter=" ")
-
-    
+        if savefolder!= False:
+            df.to_csv(r""+savefolder+"/wins.csv")
+            df2.to_csv(r""+savefolder+"/draws.csv")
 
