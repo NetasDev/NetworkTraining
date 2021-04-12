@@ -287,17 +287,17 @@ hp = HumanOthelloPlayer(game)
 arena = Arena.Arena(hp,hp,game)
 arena.playGames(10,Interactive=True)
 """
-"""
+
 i = 1
 while(True):
     
-    Inboard = InteractiveBoard.load("./evaluation_games/8x8vsminimax/value matrix with deter/game"+str(i))
+    Inboard = InteractiveBoard.load("./evaluation_games/8x8/minimax/combined value/game"+str(25))
     Inboard.show_replay()
     i = i+1
-"""
+
 
 ########### data analysis
-
+"""
 
 all_mcts_simulations = 0
 evaluation_mcts = np.zeros((140,3))
@@ -308,20 +308,17 @@ average_board_value = np.zeros((140,4))
 score_difference = np.zeros((140,2))
 wins,losses,draws = 0,0,0
 
-heatmap_neural = np.zeros((8,8))
+heatmap_neural = np.zeros((6,6))
 
 for i in range(1000):
-    path = "./evaluation_games/8x8vsminimax/value matrix with deter/game"+str(i)
-    path2 = "./evaluation_games/8x8vsminimax/coin value with deter/game"+str(i)
-    path3 =  "./evaluation_games/8x8vsminimax/combined value with deter/game"+str(i)
+    path = "./evaluation_games/6x6/minimax/combined value/game"+str(i)
+
 
     if os.path.isfile(path+".pkl"):
         Inboard = InteractiveBoard.load(path)
-        Inboard2 = InteractiveBoard.load(path2)
-        Inboard3 = InteractiveBoard.load(path3)
         neural = 0
 
-        if Inboard.player1_name == "neural network":
+        if Inboard.player1_name == "Neural agent":
             neural = 1
         else:
             neural = -1
@@ -335,11 +332,6 @@ for i in range(1000):
 
         
         for j in range(len(Inboard.action_history)):
-            if Inboard.action_history[j][0]==neural:
-                move = Inboard.game.action_to_move(Inboard.action_history[j][1])
-                if move[0] != Inboard.game.n:
-                    heatmap_neural[move[0]][move[1]]+=1
-
             if Inboard.prediction_history[j][0]==neural:
                 evaluation_mcts[j+1][0] += 1
                 evaluation_mcts[j+1][1] +=Inboard.prediction_history[j][1]
@@ -359,38 +351,23 @@ for i in range(1000):
                 else:
                     evaluation_minimax[j+1][2] += 10
 
-        for j in range(len(Inboard2.action_history)):
-            if Inboard2.action_history[j][0]==neural:
-                move = Inboard2.game.action_to_move(Inboard2.action_history[j][1])
-                if move[0] != Inboard2.game.n:
-                    heatmap_neural[move[0]][move[1]]+=1
-        for j in range(len(Inboard3.action_history)):
-            if Inboard3.action_history[j][0]==neural:
-                move = Inboard3.game.action_to_move(Inboard3.action_history[j][1])
-                if move[0] != Inboard3.game.n:
-                    heatmap_neural[move[0]][move[1]]+=1
-
         a = Inboard.game.getGameEnded(Inboard.board_history[len(Inboard.board_history)-1],neural)
         if a ==1:
-            wins+=1
+            wins+=1    
         if a ==-1:
             losses+=1
         if a == -0.05:
             draws += 1
 
 
-import seaborn as sns
-sns.set_theme()
-ax = sns.heatmap(heatmap_neural)
-ax.figure.savefig("output.png")
 
 
 print(evaluation_mcts)
+
 print(str(wins) + " "+str(losses)+" "+str(draws))
-
 """
-
-wandb.init(project="final evaluation")
+"""
+wandb.init(project="neural vs minimax")
 
 for j in range(len(score_difference)):
     if score_difference[j][1]>0:
@@ -404,10 +381,10 @@ for j in range(len(score_difference)):
                         "Corner value":average_board_value[j][1]/score_difference[j][1],
                         "Mobility value":average_board_value[j][2]/score_difference[j][1],
                         "stability value":average_board_value[j][3]/score_difference[j][1]})
+"""
 
 #evaluation_mcts[j]/(score_difference[j][1]/2)
 #evaluation_mcts[j]/(score_difference[j][1]/2)
-"""
 
 
 
