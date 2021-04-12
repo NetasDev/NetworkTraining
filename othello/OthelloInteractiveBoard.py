@@ -44,8 +44,6 @@ class InteractiveBoard():
         print(prediction_history)
         return prediction_history
 
-
-
     def get_last_depth(self,player):
         for i in range(len(self.prediction_history)):
             if self.prediction_history[len(self.prediction_history)-i-1][0] == player:
@@ -61,8 +59,9 @@ class InteractiveBoard():
     def draw_field(self,screen):
         screen.fill((0,110,0))
         for row in range(self.size+2):
-            pygame.draw.line(screen,(0,0,0),(row*self.square_size,0),(row*self.square_size,self.screen_size),width=4)
-            pygame.draw.line(screen,(0,0,0),(0,row*self.square_size),(self.screen_size,row*self.square_size),width=4)
+            pygame.draw.line(screen,(0,0,0),(row*self.square_size,0),(row*self.square_size,self.screen_size+100),width=4)
+            pygame.draw.line(screen,(0,0,0),(0,row*self.square_size),(self.screen_size+100,row*self.square_size),width=4)
+        
 
         #for col in range(self.size):
     
@@ -130,7 +129,7 @@ class InteractiveBoard():
                         Game_Font = pygame.freetype.Font(None,24)
                         Game_Font.render_to(screen,(x-24,y-12),"Skip",(0,0,0))
                         break
-                    pygame.draw.circle(screen,(0,0,0),(x,y),self.square_size/2-self.space/1.2)
+                    pygame.draw.circle(screen,(0,0,0),(x,y),self.square_size/2-self.space/1.5)
                     pygame.draw.circle(screen,(0,110,0),(x,y),self.square_size/2-self.space)
             
             ####
@@ -144,7 +143,7 @@ class InteractiveBoard():
 
         run = True
 
-        screen = pygame.display.set_mode((self.screen_size,self.screen_size))
+        screen = pygame.display.set_mode((self.screen_size+100+self.side_screen_size,self.screen_size+100))
         """+self.side_screen_size"""
         self.draw_field(screen)
         self.draw_side_board(screen)
@@ -209,7 +208,7 @@ class InteractiveBoard():
         #InBoard = InteractiveBoard(board,game,len(board))
         #FPS = 60
         run = True
-        screen = pygame.display.set_mode((self.screen_size+self.side_screen_size,self.screen_size))
+        screen = pygame.display.set_mode((self.screen_size,self.screen_size))
         """+self.side_screen_size,self.screen_size"""
         while run:
 
@@ -235,7 +234,7 @@ class InteractiveBoard():
             self.prediction_history = prediction_history[:self.move]
             
             self.draw_field(screen)
-            self.draw_side_board(screen)
+            #self.draw_side_board(screen)
             self.draw_board(screen)
             pygame.display.update()
             print(self.move)
